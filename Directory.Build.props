@@ -13,7 +13,7 @@
   </PropertyGroup>
 
   <PropertyGroup Label="Release">
-    <Version>0.3.0</Version>
+    <Version>0.4.0</Version>
   </PropertyGroup>
 
   <!-- Libraries and the CLI run under Native AOT: the trim and AOT analyzers run on every build,

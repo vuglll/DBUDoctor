@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+## 0.4.0
+
+First release from the public DBUDoctor repository.
+
+- Updated the package README and added a NuGet package icon.
 - Clusters on instance pools are priced: `estimation.instance_pools` maps a pool ID to its node type, for workers (`instance_pool_id`) and drivers (`driver_instance_pool_id`). An unmapped pool stays Unknown, and the reason names the setting to add.
 - `dbudoctor diff --var name=value` (repeatable) passes bundle variables to `bundle validate` at both refs and to `bundle summary`, for variables without a default. When validate fails on a required variable, the error suggests `--var` or `BUNDLE_VAR_<name>`.
 - `pip install dbudoctor`: each release publishes wheels for Linux x64 and ARM64, macOS ARM64 and Windows x64 to PyPI, holding the native binary (no .NET needed); `python -m dbudoctor` works too. Wheel platform tags are read from the binary.

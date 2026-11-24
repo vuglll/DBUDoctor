@@ -1,6 +1,6 @@
 # DBUDoctor JSON output
 
-Generated for DBUDoctor 0.3.0. `dbudoctor diff --format json` prints one JSON document. The schema is `schemas/report.schema.json` (`schemaVersion: 1`); fields are only ever added.
+Generated for DBUDoctor 0.4.0. `dbudoctor diff --format json` prints one JSON document. The schema is `schemas/report.schema.json` (`schemaVersion: 1`); fields are only ever added.
 
 Amounts are unrounded decimals in `currency` (USD list prices). Monthly figures assume a 730-hour month.
 

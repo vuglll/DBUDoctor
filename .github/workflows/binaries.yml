@@ -35,6 +35,36 @@ jobs:
         shell: bash
         run: dotnet publish "$PROJECT" --configuration Release --runtime ${{ matrix.rid }} --output publish
 
+      - name: Smoke test
+        shell: bash
+        run: |
+          ./publish/dbudoctor --version
+          ./publish/dbudoctor diff \
+            --base-json tests/Fixtures/bundles/azure-analytics/base.json \
+            --head-json tests/Fixtures/bundles/azure-analytics/head.json \
+            --config tests/Fixtures/bundles/azure-analytics/.dbudoctor.yml \
+            --format json > report.json || test $? -eq 1
+          grep -q '"schemaVersion": 1' report.json
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      # Builds this platform's PyPI wheel, installs it in a fresh virtual environment and runs it.
+      - name: Wheel
+        shell: bash
+        env:
+          DBUDOCTOR_RID: ${{ matrix.rid }}
+          DBUDOCTOR_BINARY: ${{ github.workspace }}/publish/dbudoctor${{ matrix.rid == 'win-x64' && '.exe' || '' }}
+        run: |
+          export DBUDOCTOR_VERSION="$(./publish/dbudoctor --version | cut -d+ -f1)"
+          python -m unittest discover -s tools/wheels -v
+
+      - name: Tests on this platform
+        if: matrix.rid == 'win-x64' || matrix.rid == 'osx-arm64'
+        shell: bash
+        run: dotnet test DBUDoctor.slnx --configuration Release
+
       - name: Archive
         shell: bash
         run: |

@@ -5,7 +5,7 @@
 cloud: aws
 region: eu-north-1
 currency: USD
-as_of: 2026-11-10
+as_of: 2026-11-24
 source: https://www.databricks.com/en-pricing-assets/data/pricing/AWS.json
 vm_source: https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AmazonEC2/current/region_index.json
 dbu:
@@ -154,12 +154,10 @@ vm:
   g5.xlarge: { payg: 1.067, reserved_1y: 0.67221, reserved_3y: 0.46094 }
   g6.12xlarge: { payg: 4.88062, reserved_1y: 3.17729, reserved_3y: 2.24021 }
   g6.16xlarge: { payg: 3.60277, reserved_1y: 2.3454, reserved_3y: 1.65367 }
-  g6.24xlarge: { payg: 7.07996, reserved_1y: 4.60905, reserved_3y: 3.2497 }
   g6.2xlarge: { payg: 1.03688, reserved_1y: 0.67501, reserved_3y: 0.47593 }
   g6.48xlarge: { payg: 14.15992, reserved_1y: 9.21811, reserved_3y: 6.4994 }
   g6.4xlarge: { payg: 1.40343, reserved_1y: 0.91364, reserved_3y: 0.64418 }
   g6.8xlarge: { payg: 2.13655, reserved_1y: 1.39089, reserved_3y: 0.98067 }
-  g6.xlarge: { payg: 0.8536, reserved_1y: 0.55569, reserved_3y: 0.3918 }
   g6e.12xlarge: { payg: 11.12975, reserved_1y: 7.01174, reserved_3y: 4.80805 }
   g6e.16xlarge: { payg: 8.03728, reserved_1y: 5.06349, reserved_3y: 3.47211 }
   g6e.24xlarge: { payg: 15.98037, reserved_1y: 10.06764, reserved_3y: 6.90352 }
@@ -168,6 +166,18 @@ vm:
   g6e.4xlarge: { payg: 3.18666, reserved_1y: 2.00759, reserved_3y: 1.37664 }
   g6e.8xlarge: { payg: 4.80353, reserved_1y: 3.02622, reserved_3y: 2.07513 }
   g6e.xlarge: { payg: 1.974, reserved_1y: 1.24362, reserved_3y: 0.85277 }
+  g7.12xlarge: { payg: 7.56055 }
+  g7.24xlarge: { payg: 15.12109 }
+  g7.2xlarge: { payg: 2.6728 }
+  g7.48xlarge: { payg: 30.24218 }
+  g7.4xlarge: { payg: 3.22654 }
+  g7.8xlarge: { payg: 4.33401 }
+  g7e.12xlarge: { payg: 11.95333 }
+  g7e.24xlarge: { payg: 23.90667 }
+  g7e.2xlarge: { payg: 4.85157 }
+  g7e.48xlarge: { payg: 47.81334 }
+  g7e.4xlarge: { payg: 5.76767 }
+  g7e.8xlarge: { payg: 7.59986 }
   i3.16xlarge: { payg: 5.216, reserved_1y: 3.566, reserved_3y: 2.555 }
   i3.2xlarge: { payg: 0.652, reserved_1y: 0.446, reserved_3y: 0.319 }
   i3.4xlarge: { payg: 1.304, reserved_1y: 0.892, reserved_3y: 0.639 }
@@ -324,6 +334,7 @@ vm:
   m8id.large: { payg: 0.1386 }
   m8id.xlarge: { payg: 0.2772 }
   p4d.24xlarge: { payg: 23.71569 }
+  p5.4xlarge: { payg: 7.3616 }
   r5.12xlarge: { payg: 3.216, reserved_1y: 2.026, reserved_3y: 1.389 }
   r5.16xlarge: { payg: 4.288, reserved_1y: 2.701, reserved_3y: 1.852 }
   r5.24xlarge: { payg: 6.432, reserved_1y: 4.052, reserved_3y: 2.779 }

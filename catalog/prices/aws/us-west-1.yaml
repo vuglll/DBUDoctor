@@ -5,7 +5,7 @@
 cloud: aws
 region: us-west-1
 currency: USD
-as_of: 2026-11-10
+as_of: 2026-11-24
 source: https://www.databricks.com/en-pricing-assets/data/pricing/AWS.json
 vm_source: https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AmazonEC2/current/region_index.json
 dbu:
@@ -314,6 +314,16 @@ vm:
   m8i.8xlarge: { payg: 1.97568 }
   m8i.large: { payg: 0.12348 }
   m8i.xlarge: { payg: 0.24696 }
+  m9g.12xlarge: { payg: 2.73936 }
+  m9g.16xlarge: { payg: 3.65248 }
+  m9g.24xlarge: { payg: 5.47872 }
+  m9g.2xlarge: { payg: 0.45656 }
+  m9g.48xlarge: { payg: 10.95744 }
+  m9g.4xlarge: { payg: 0.91312 }
+  m9g.8xlarge: { payg: 1.82624 }
+  m9g.large: { payg: 0.11414 }
+  m9g.medium: { payg: 0.05707 }
+  m9g.xlarge: { payg: 0.22828 }
   r3.2xlarge: { payg: 0.741, reserved_1y: 0.543 }
   r3.4xlarge: { payg: 1.482, reserved_1y: 1.087 }
   r3.8xlarge: { payg: 2.964, reserved_1y: 2.174 }

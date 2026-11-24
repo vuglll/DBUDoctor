@@ -5,7 +5,7 @@
 cloud: aws
 region: eu-central-1
 currency: USD
-as_of: 2026-11-10
+as_of: 2026-11-24
 source: https://www.databricks.com/en-pricing-assets/data/pricing/AWS.json
 vm_source: https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AmazonEC2/current/region_index.json
 dbu:
@@ -190,12 +190,10 @@ vm:
   g5.xlarge: { payg: 1.258, reserved_1y: 0.79254, reserved_3y: 0.54346 }
   g6.12xlarge: { payg: 5.75429, reserved_1y: 3.74604, reserved_3y: 2.64122 }
   g6.16xlarge: { payg: 4.24769, reserved_1y: 2.76525, reserved_3y: 1.94969 }
-  g6.24xlarge: { payg: 8.34732, reserved_1y: 5.4341, reserved_3y: 3.83142 }
   g6.2xlarge: { payg: 1.22249, reserved_1y: 0.79584, reserved_3y: 0.56112 }
   g6.48xlarge: { payg: 16.69464, reserved_1y: 10.86821, reserved_3y: 7.66284 }
   g6.4xlarge: { payg: 1.65466, reserved_1y: 1.07718, reserved_3y: 0.75949 }
   g6.8xlarge: { payg: 2.519, reserved_1y: 1.63987, reserved_3y: 1.15622 }
-  g6.xlarge: { payg: 1.0064, reserved_1y: 0.65517, reserved_3y: 0.46194 }
   g6e.12xlarge: { payg: 13.12002, reserved_1y: 8.26562, reserved_3y: 5.66785 }
   g6e.16xlarge: { payg: 9.47454, reserved_1y: 5.96896, reserved_3y: 4.093 }
   g6e.24xlarge: { payg: 18.83806, reserved_1y: 11.86798, reserved_3y: 8.13804 }
@@ -204,6 +202,18 @@ vm:
   g6e.4xlarge: { payg: 3.75651, reserved_1y: 2.3666, reserved_3y: 1.62281 }
   g6e.8xlarge: { payg: 5.66252, reserved_1y: 3.56739, reserved_3y: 2.44621 }
   g6e.xlarge: { payg: 2.327, reserved_1y: 1.46601, reserved_3y: 1.00526 }
+  g7.12xlarge: { payg: 8.91408 }
+  g7.24xlarge: { payg: 17.82815 }
+  g7.2xlarge: { payg: 3.1513 }
+  g7.48xlarge: { payg: 35.65631 }
+  g7.4xlarge: { payg: 3.80417 }
+  g7.8xlarge: { payg: 5.10991 }
+  g7e.12xlarge: { payg: 14.09088 }
+  g7e.24xlarge: { payg: 28.18177 }
+  g7e.2xlarge: { payg: 5.71915 }
+  g7e.48xlarge: { payg: 56.36354 }
+  g7e.4xlarge: { payg: 6.79907 }
+  g7e.8xlarge: { payg: 8.9589 }
   i2.2xlarge: { payg: 2.026, reserved_1y: 1.112 }
   i2.4xlarge: { payg: 4.051, reserved_1y: 2.224 }
   i2.8xlarge: { payg: 8.102, reserved_1y: 4.448 }
@@ -379,6 +389,15 @@ vm:
   m7i.8xlarge: { payg: 1.932, reserved_1y: 1.27802, reserved_3y: 0.87636 }
   m7i.large: { payg: 0.12075, reserved_1y: 0.07988, reserved_3y: 0.05477 }
   m7i.xlarge: { payg: 0.2415, reserved_1y: 0.15975, reserved_3y: 0.10954 }
+  m8a.12xlarge: { payg: 3.4992 }
+  m8a.16xlarge: { payg: 4.6656 }
+  m8a.24xlarge: { payg: 6.9984 }
+  m8a.2xlarge: { payg: 0.5832 }
+  m8a.48xlarge: { payg: 13.9968 }
+  m8a.4xlarge: { payg: 1.1664 }
+  m8a.8xlarge: { payg: 2.3328 }
+  m8a.large: { payg: 0.1458 }
+  m8a.xlarge: { payg: 0.2916 }
   m8g.12xlarge: { payg: 2.58096, reserved_1y: 1.70731, reserved_3y: 1.17072 }
   m8g.16xlarge: { payg: 3.44128, reserved_1y: 2.27641, reserved_3y: 1.56096 }
   m8g.24xlarge: { payg: 5.16192, reserved_1y: 3.41461, reserved_3y: 2.34145 }
@@ -416,6 +435,26 @@ vm:
   m8id.8xlarge: { payg: 2.51328 }
   m8id.large: { payg: 0.15708 }
   m8id.xlarge: { payg: 0.31416 }
+  m9g.12xlarge: { payg: 2.81328 }
+  m9g.16xlarge: { payg: 3.75104 }
+  m9g.24xlarge: { payg: 5.62656 }
+  m9g.2xlarge: { payg: 0.46888 }
+  m9g.48xlarge: { payg: 11.25312 }
+  m9g.4xlarge: { payg: 0.93776 }
+  m9g.8xlarge: { payg: 1.87552 }
+  m9g.large: { payg: 0.11722 }
+  m9g.medium: { payg: 0.05861 }
+  m9g.xlarge: { payg: 0.23444 }
+  m9gd.12xlarge: { payg: 3.6312 }
+  m9gd.16xlarge: { payg: 4.8416 }
+  m9gd.24xlarge: { payg: 7.2624 }
+  m9gd.2xlarge: { payg: 0.6052 }
+  m9gd.48xlarge: { payg: 14.5248 }
+  m9gd.4xlarge: { payg: 1.2104 }
+  m9gd.8xlarge: { payg: 2.4208 }
+  m9gd.large: { payg: 0.1513 }
+  m9gd.medium: { payg: 0.07565 }
+  m9gd.xlarge: { payg: 0.3026 }
   p2.16xlarge: { payg: 21.216 }
   p2.8xlarge: { payg: 10.608 }
   p2.xlarge: { payg: 1.326 }
@@ -423,6 +462,7 @@ vm:
   p3.2xlarge: { payg: 3.823 }
   p3.8xlarge: { payg: 15.292 }
   p4d.24xlarge: { payg: 27.43298, reserved_1y: 17.392445, reserved_3y: 11.711766 }
+  p5.4xlarge: { payg: 8.6 }
   r3.2xlarge: { payg: 0.8, reserved_1y: 0.585 }
   r3.4xlarge: { payg: 1.6, reserved_1y: 1.17 }
   r3.8xlarge: { payg: 3.201, reserved_1y: 2.341 }
@@ -560,7 +600,17 @@ vm:
   r7iz.32xlarge: { payg: 14.4, reserved_1y: 9.072, reserved_3y: 6.08254 }
   r7iz.4xlarge: { payg: 1.8, reserved_1y: 1.134, reserved_3y: 0.76032 }
   r7iz.8xlarge: { payg: 3.6, reserved_1y: 2.268, reserved_3y: 1.52064 }
+  r7iz.large: { payg: 0.225, reserved_1y: 0.14175, reserved_3y: 0.09504 }
   r7iz.xlarge: { payg: 0.45, reserved_1y: 0.2835, reserved_3y: 0.19008 }
+  r8a.12xlarge: { payg: 4.62528 }
+  r8a.16xlarge: { payg: 6.16704 }
+  r8a.24xlarge: { payg: 9.25056 }
+  r8a.2xlarge: { payg: 0.77088 }
+  r8a.48xlarge: { payg: 18.50112 }
+  r8a.4xlarge: { payg: 1.54176 }
+  r8a.8xlarge: { payg: 3.08352 }
+  r8a.large: { payg: 0.19272 }
+  r8a.xlarge: { payg: 0.38544 }
   r8g.12xlarge: { payg: 3.41088, reserved_1y: 2.2563, reserved_3y: 1.54718 }
   r8g.16xlarge: { payg: 4.54784, reserved_1y: 3.0084, reserved_3y: 2.0629 }
   r8g.24xlarge: { payg: 6.82176, reserved_1y: 4.51259, reserved_3y: 3.09435 }

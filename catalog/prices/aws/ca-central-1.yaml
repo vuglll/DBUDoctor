@@ -5,7 +5,7 @@
 cloud: aws
 region: ca-central-1
 currency: USD
-as_of: 2026-11-10
+as_of: 2026-11-24
 source: https://www.databricks.com/en-pricing-assets/data/pricing/AWS.json
 vm_source: https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AmazonEC2/current/region_index.json
 dbu:
@@ -168,12 +168,16 @@ vm:
   g5.xlarge: { payg: 1.117, reserved_1y: 0.70371, reserved_3y: 0.48254 }
   g6.12xlarge: { payg: 5.10933, reserved_1y: 3.32617, reserved_3y: 2.34518 }
   g6.16xlarge: { payg: 3.7716, reserved_1y: 2.45531, reserved_3y: 1.73116 }
-  g6.24xlarge: { payg: 7.41173, reserved_1y: 4.82503, reserved_3y: 3.40198 }
   g6.2xlarge: { payg: 1.08547, reserved_1y: 0.70664, reserved_3y: 0.49823 }
   g6.48xlarge: { payg: 14.82346, reserved_1y: 9.65007, reserved_3y: 6.80397 }
   g6.4xlarge: { payg: 1.4692, reserved_1y: 0.95645, reserved_3y: 0.67436 }
   g6.8xlarge: { payg: 2.23666, reserved_1y: 1.45607, reserved_3y: 1.02663 }
-  g6.xlarge: { payg: 0.8936, reserved_1y: 0.58173, reserved_3y: 0.41016 }
+  g7e.12xlarge: { payg: 12.51043 }
+  g7e.24xlarge: { payg: 25.02085 }
+  g7e.2xlarge: { payg: 5.07768 }
+  g7e.48xlarge: { payg: 50.0417 }
+  g7e.4xlarge: { payg: 6.03647 }
+  g7e.8xlarge: { payg: 7.95405 }
   i3.16xlarge: { payg: 5.504, reserved_1y: 3.763, reserved_3y: 2.696 }
   i3.2xlarge: { payg: 0.688, reserved_1y: 0.47, reserved_3y: 0.337 }
   i3.4xlarge: { payg: 1.376, reserved_1y: 0.941, reserved_3y: 0.674 }
@@ -351,6 +355,16 @@ vm:
   m8id.8xlarge: { payg: 2.32848 }
   m8id.large: { payg: 0.14553 }
   m8id.xlarge: { payg: 0.29106 }
+  m9g.12xlarge: { payg: 2.61744 }
+  m9g.16xlarge: { payg: 3.48992 }
+  m9g.24xlarge: { payg: 5.23488 }
+  m9g.2xlarge: { payg: 0.43624 }
+  m9g.48xlarge: { payg: 10.46976 }
+  m9g.4xlarge: { payg: 0.87248 }
+  m9g.8xlarge: { payg: 1.74496 }
+  m9g.large: { payg: 0.10906 }
+  m9g.medium: { payg: 0.05453 }
+  m9g.xlarge: { payg: 0.21812 }
   p3.16xlarge: { payg: 26.928 }
   p3.2xlarge: { payg: 3.366 }
   p3.8xlarge: { payg: 13.464 }
@@ -456,6 +470,15 @@ vm:
   r7i.8xlarge: { payg: 2.3184, reserved_1y: 1.53732, reserved_3y: 1.04782 }
   r7i.large: { payg: 0.1449, reserved_1y: 0.09608, reserved_3y: 0.06549 }
   r7i.xlarge: { payg: 0.2898, reserved_1y: 0.19217, reserved_3y: 0.13098 }
+  r8a.12xlarge: { payg: 4.19928 }
+  r8a.16xlarge: { payg: 5.59904 }
+  r8a.24xlarge: { payg: 8.39856 }
+  r8a.2xlarge: { payg: 0.69988 }
+  r8a.48xlarge: { payg: 16.79712 }
+  r8a.4xlarge: { payg: 1.39976 }
+  r8a.8xlarge: { payg: 2.79952 }
+  r8a.large: { payg: 0.17497 }
+  r8a.xlarge: { payg: 0.34994 }
   r8g.12xlarge: { payg: 3.09696, reserved_1y: 2.05358, reserved_3y: 1.3997 }
   r8g.16xlarge: { payg: 4.12928, reserved_1y: 2.73811, reserved_3y: 1.86626 }
   r8g.24xlarge: { payg: 6.19392, reserved_1y: 4.10716, reserved_3y: 2.79939 }

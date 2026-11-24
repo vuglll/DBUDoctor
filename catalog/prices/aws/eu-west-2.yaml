@@ -5,7 +5,7 @@
 cloud: aws
 region: eu-west-2
 currency: USD
-as_of: 2026-11-10
+as_of: 2026-11-24
 source: https://www.databricks.com/en-pricing-assets/data/pricing/AWS.json
 vm_source: https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AmazonEC2/current/region_index.json
 dbu:
@@ -177,12 +177,22 @@ vm:
   g5.xlarge: { payg: 1.277, reserved_1y: 0.80451, reserved_3y: 0.55166 }
   g6.12xlarge: { payg: 5.8412, reserved_1y: 3.80262, reserved_3y: 2.68111 }
   g6.16xlarge: { payg: 4.31184, reserved_1y: 2.80701, reserved_3y: 1.97914 }
-  g6.24xlarge: { payg: 8.47339, reserved_1y: 5.51618, reserved_3y: 3.88929 }
   g6.2xlarge: { payg: 1.24095, reserved_1y: 0.80786, reserved_3y: 0.5696 }
   g6.48xlarge: { payg: 16.94678, reserved_1y: 11.03235, reserved_3y: 7.77857 }
   g6.4xlarge: { payg: 1.67965, reserved_1y: 1.09345, reserved_3y: 0.77096 }
   g6.8xlarge: { payg: 2.55705, reserved_1y: 1.66464, reserved_3y: 1.17368 }
-  g6.xlarge: { payg: 1.0216, reserved_1y: 0.66506, reserved_3y: 0.46891 }
+  g7.12xlarge: { payg: 10.81298 }
+  g7.24xlarge: { payg: 21.62597 }
+  g7.2xlarge: { payg: 3.8226 }
+  g7.48xlarge: { payg: 43.25193 }
+  g7.4xlarge: { payg: 4.61455 }
+  g7.8xlarge: { payg: 6.19844 }
+  g7e.12xlarge: { payg: 14.40172 }
+  g7e.24xlarge: { payg: 28.80344 }
+  g7e.2xlarge: { payg: 5.84531 }
+  g7e.48xlarge: { payg: 57.60687 }
+  g7e.4xlarge: { payg: 6.94905 }
+  g7e.8xlarge: { payg: 9.15653 }
   i3.16xlarge: { payg: 5.792, reserved_1y: 3.965, reserved_3y: 2.834 }
   i3.2xlarge: { payg: 0.724, reserved_1y: 0.496, reserved_3y: 0.354 }
   i3.4xlarge: { payg: 1.448, reserved_1y: 0.991, reserved_3y: 0.708 }
@@ -374,6 +384,7 @@ vm:
   p3.2xlarge: { payg: 3.589 }
   p3.8xlarge: { payg: 14.356 }
   p4d.24xlarge: { payg: 28.54493 }
+  p5.4xlarge: { payg: 8.944, reserved_3y: 3.86381 }
   r4.16xlarge: { payg: 4.992, reserved_1y: 3.1584, reserved_3y: 2.1427 }
   r4.2xlarge: { payg: 0.624, reserved_1y: 0.3948, reserved_3y: 0.2678 }
   r4.4xlarge: { payg: 1.248, reserved_1y: 0.7896, reserved_3y: 0.5357 }

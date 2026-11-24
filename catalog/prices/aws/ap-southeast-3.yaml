@@ -5,7 +5,7 @@
 cloud: aws
 region: ap-southeast-3
 currency: USD
-as_of: 2026-11-10
+as_of: 2026-11-24
 source: https://www.databricks.com/en-pricing-assets/data/pricing/AWS.json
 vm_source: https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AmazonEC2/current/region_index.json
 dbu:
@@ -127,6 +127,12 @@ vm:
   g5.4xlarge: { payg: 2.27295, reserved_1y: 1.43196, reserved_3y: 0.98192 }
   g5.8xlarge: { payg: 3.42623, reserved_1y: 2.15852, reserved_3y: 1.48013 }
   g5.xlarge: { payg: 1.408, reserved_1y: 0.88704, reserved_3y: 0.60826 }
+  g7e.12xlarge: { payg: 15.77426 }
+  g7e.24xlarge: { payg: 31.54851 }
+  g7e.2xlarge: { payg: 6.40239 }
+  g7e.48xlarge: { payg: 63.09702 }
+  g7e.4xlarge: { payg: 7.61132 }
+  g7e.8xlarge: { payg: 10.02918 }
   i3.16xlarge: { payg: 5.984, reserved_1y: 4.099, reserved_3y: 2.903 }
   i3.2xlarge: { payg: 0.748, reserved_1y: 0.512, reserved_3y: 0.363 }
   i3.4xlarge: { payg: 1.496, reserved_1y: 1.025, reserved_3y: 0.726 }
@@ -230,6 +236,7 @@ vm:
   m8g.large: { payg: 0.1122, reserved_1y: 0.07422, reserved_3y: 0.05089 }
   m8g.medium: { payg: 0.0561, reserved_1y: 0.03711, reserved_3y: 0.02545 }
   m8g.xlarge: { payg: 0.2244, reserved_1y: 0.14844, reserved_3y: 0.10179 }
+  p5.4xlarge: { payg: 9.4944, reserved_3y: 4.10158 }
   r5.12xlarge: { payg: 3.648, reserved_1y: 2.298, reserved_3y: 1.576 }
   r5.16xlarge: { payg: 4.864, reserved_1y: 3.064, reserved_3y: 2.101 }
   r5.24xlarge: { payg: 7.296, reserved_1y: 4.596, reserved_3y: 3.152 }

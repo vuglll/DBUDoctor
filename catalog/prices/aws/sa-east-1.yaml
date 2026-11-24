@@ -5,7 +5,7 @@
 cloud: aws
 region: sa-east-1
 currency: USD
-as_of: 2026-11-10
+as_of: 2026-11-24
 source: https://www.databricks.com/en-pricing-assets/data/pricing/AWS.json
 vm_source: https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AmazonEC2/current/region_index.json
 dbu:
@@ -171,12 +171,16 @@ vm:
   g5.xlarge: { payg: 1.71, reserved_1y: 1.0773, reserved_3y: 0.73872 }
   g6.12xlarge: { payg: 7.82181, reserved_1y: 5.092, reserved_3y: 3.59021 }
   g6.16xlarge: { payg: 5.77388, reserved_1y: 3.7588, reserved_3y: 2.65021 }
-  g6.24xlarge: { payg: 11.34651, reserved_1y: 7.38658, reserved_3y: 5.20805 }
   g6.2xlarge: { payg: 1.66173, reserved_1y: 1.08178, reserved_3y: 0.76273 }
   g6.48xlarge: { payg: 22.69303, reserved_1y: 14.77316, reserved_3y: 10.4161 }
   g6.4xlarge: { payg: 2.24918, reserved_1y: 1.46421, reserved_3y: 1.03237 }
   g6.8xlarge: { payg: 3.42408, reserved_1y: 2.22908, reserved_3y: 1.57165 }
-  g6.xlarge: { payg: 1.368, reserved_1y: 0.89057, reserved_3y: 0.62791 }
+  g7.12xlarge: { payg: 14.25664 }
+  g7.24xlarge: { payg: 28.51328 }
+  g7.2xlarge: { payg: 5.04 }
+  g7.48xlarge: { payg: 57.02656 }
+  g7.4xlarge: { payg: 6.08416 }
+  g7.8xlarge: { payg: 8.17248 }
   i3.16xlarge: { payg: 7.968, reserved_1y: 5.441, reserved_3y: 3.851 }
   i3.2xlarge: { payg: 0.996, reserved_1y: 0.68, reserved_3y: 0.481 }
   i3.4xlarge: { payg: 1.992, reserved_1y: 1.36, reserved_3y: 0.963 }
@@ -358,7 +362,18 @@ vm:
   m8i.8xlarge: { payg: 2.69888 }
   m8i.large: { payg: 0.16868 }
   m8i.xlarge: { payg: 0.33736 }
+  m9g.12xlarge: { payg: 3.74256 }
+  m9g.16xlarge: { payg: 4.99008 }
+  m9g.24xlarge: { payg: 7.48512 }
+  m9g.2xlarge: { payg: 0.62376 }
+  m9g.48xlarge: { payg: 14.97024 }
+  m9g.4xlarge: { payg: 1.24752 }
+  m9g.8xlarge: { payg: 2.49504 }
+  m9g.large: { payg: 0.15594 }
+  m9g.medium: { payg: 0.07797 }
+  m9g.xlarge: { payg: 0.31188 }
   p4d.24xlarge: { payg: 35.5569, reserved_1y: 22.684095, reserved_3y: 15.0498 }
+  p5.4xlarge: { payg: 11.5584, reserved_3y: 4.99323 }
   r3.2xlarge: { payg: 1.399, reserved_1y: 1.067 }
   r3.4xlarge: { payg: 2.799, reserved_1y: 2.134 }
   r3.8xlarge: { payg: 5.597, reserved_1y: 4.268 }

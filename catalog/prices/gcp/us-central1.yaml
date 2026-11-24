@@ -4,7 +4,7 @@
 cloud: gcp
 region: us-central1
 currency: USD
-as_of: 2026-11-10
+as_of: 2026-11-24
 source: https://www.databricks.com/en-pricing-assets/data/pricing/GCP.json
 dbu:
   PREMIUM_ALL_PURPOSE_COMPUTE: 0.55

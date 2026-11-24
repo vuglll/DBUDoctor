@@ -4,7 +4,7 @@
 cloud: azure
 region: canadaeast
 currency: USD
-as_of: 2026-11-10
+as_of: 2026-11-24
 source: https://prices.azure.com/api/retail/prices
 dbu:
   PREMIUM_ALL_PURPOSE_COMPUTE: 0.55

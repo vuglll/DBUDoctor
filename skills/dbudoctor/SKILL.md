@@ -5,7 +5,7 @@ description: Estimates what a Databricks bundle change will cost and flags costl
 
 # DBUDoctor
 
-Generated for DBUDoctor 0.3.0 from rule metadata. Do not edit by hand: run `dbudoctor skill export --dir <path> --force` to update it.
+Generated for DBUDoctor 0.4.0 from rule metadata. Do not edit by hand: run `dbudoctor skill export --dir <path> --force` to update it.
 
 DBUDoctor compares a Databricks bundle at two git refs and reports the cost change per resource, with a confidence level for every monthly figure, plus findings for costly patterns.
 

@@ -1,6 +1,6 @@
 # DBUDoctor rules
 
-Generated for DBUDoctor 0.3.0 from rule metadata. Do not edit by hand.
+Generated for DBUDoctor 0.4.0 from rule metadata. Do not edit by hand.
 
 Change a rule's severity or parameters, or turn it off, under `rules` in `.dbudoctor.yml`, for example `rules: { DBU010: { severity: error, factor: 4 } }`. Suppress one finding with a `suppressions` entry: a `rule`, a `resource` selector (`<type>.<key>`, wildcards allowed) and a `reason`, which is required.
 

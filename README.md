@@ -1,9 +1,10 @@
 # DBUDoctor
 
-DBUDoctor shows what a Databricks bundle change will cost, in the pull request, before it merges. It resolves the bundle at the pull request base and head, prices every changed job, pipeline, cluster and SQL warehouse, flags costly patterns, and keeps one comment on the pull request up to date.
+DBUDoctor estimates the cost impact of Databricks bundle changes before merge. It compares the base and head configurations, reports estimated monthly changes or hourly rates, and flags patterns such as jobs running more often or pipelines running continuously. In GitHub Actions, it can update a single pull request comment per bundle and target.
 
-```markdown
-### DBUDoctor · `analytics` → `prod`: **+$2,651 / month** (+480% on changed resources)
+### Example pull request report
+
+**DBUDoctor · `analytics` → `prod` · +$2,651 / month** (+480% on changed resources)
 
 | Resource | Change | Before | After | Δ / month | Confidence |
 |---|---|---|---|---|---|
@@ -17,36 +18,20 @@ DBUDoctor shows what a Databricks bundle change will cost, in the pull request, 
 - warning · DBU004 · pipeline `events` is continuous: it runs around the clock (~730 h / month).
 - warning · DBU010 · job `orders_sync` runs 4.0× as often (730 → 2,920 runs / month).
 - warning · DBU001 · job `report_refresh`, task `refresh` runs on all-purpose cluster `0601-…`. Jobs compute costs about 55% of the all-purpose DBU rate here.
-```
 
-Azure is priced in full: DBUs and VMs, per region, from the public Azure Retail Prices API. AWS and GCP DBUs are priced per region and for the Premium or Enterprise plan, from the data behind the Databricks pricing calculator. AWS VMs come from the public AWS Price List (On-Demand and Standard No Upfront reservations). GCP VM prices are not in the catalog yet.
+## Install
 
-## Quick start
-
-DBUDoctor needs `git` and the [Databricks CLI](https://docs.databricks.com/dev-tools/cli/install.html) v0.239.0 or later, which it uses to run `databricks bundle validate`.
-
-To try the current source checkout, use the .NET 10 SDK:
-
-```bash
-dotnet run --project src/DBUDoctor.Cli -- diff \
-  --base-json tests/Fixtures/bundles/azure-analytics/base.json \
-  --head-json tests/Fixtures/bundles/azure-analytics/head.json \
-  --config tests/Fixtures/bundles/azure-analytics/.dbudoctor.yml
-```
-
-The public release and package channels are being set up. Once a package is published, install it with pip (no .NET needed; also works in a notebook as `%pip install dbudoctor`):
-
-```bash
-pip install dbudoctor
-```
-
-Or as a .NET tool:
+Install the .NET tool with a .NET 10 SDK:
 
 ```bash
 dotnet tool install --global DBUDoctor
 ```
 
-Or download a binary for linux-x64, linux-arm64, osx-arm64 or win-x64 from [Releases](https://github.com/vuglll/DBUDoctor/releases) and check it against `SHA256SUMS`. The Linux binaries and wheels need glibc 2.34 or later (for example Ubuntu 22.04, and Databricks Runtime 13.3 LTS and later); there is no Intel macOS build yet.
+The [PyPI package](https://pypi.org/project/dbudoctor/) and [GitHub release binaries](https://github.com/vuglll/DBUDoctor/releases) bundle the executable for Linux x64 and ARM64, macOS ARM64, and Windows x64. Linux builds require glibc 2.34 or later. Use `pip install dbudoctor` for the wheel, or verify the downloaded archive against the release's `SHA256SUMS`.
+
+## Quick start
+
+For a live bundle, install Git and the [Databricks CLI](https://docs.databricks.com/dev-tools/cli/install.html) v0.239.0 or later and authenticate to the workspace.
 
 Add `.dbudoctor.yml` to the repository root. `region` is the one setting most repositories need:
 
@@ -68,15 +53,28 @@ dbudoctor diff --format markdown    # the pull request comment
 dbudoctor diff --format json        # for scripts and agents
 ```
 
-`bundle validate` resolves the bundle against the workspace, so the Databricks CLI needs credentials (a profile locally, a service principal in CI). With pre-resolved JSON, nothing else is needed:
+### Try it offline
+
+Pre-resolved bundle JSON works without workspace credentials or the Databricks CLI:
 
 ```bash
 dbudoctor diff --base-json base.json --head-json head.json
 ```
 
+From a [source checkout](https://github.com/vuglll/DBUDoctor), you can run the sample with the .NET 10 SDK:
+
+```bash
+dotnet run --project src/DBUDoctor.Cli -- diff \
+  --base-json tests/Fixtures/bundles/azure-analytics/base.json \
+  --head-json tests/Fixtures/bundles/azure-analytics/head.json \
+  --config tests/Fixtures/bundles/azure-analytics/.dbudoctor.yml
+```
+
+The sample prints a report and exits with code 1 because its estimated monthly increase exceeds the fixture's budget.
+
 ### In GitHub Actions
 
-Once a public binary release and the `v0` Action tag are available, see [docs/examples/dbudoctor.yml](docs/examples/dbudoctor.yml). The Action downloads the binary for the runner, verifies its checksum, and keeps one comment per bundle and target. It needs `pull-requests: write`; on pull requests from forks it writes the job summary instead.
+The [example workflow](https://github.com/vuglll/DBUDoctor/blob/dev/docs/examples/dbudoctor.yml) uses the `v0` Action tag, a published binary release, and Databricks credentials for bundle validation. Give the workflow `pull-requests: write` to let it update the comment. If analysis succeeds with a read-only GitHub token, the Action writes the report to the job summary. GitHub withholds Databricks repository secrets from fork PRs in this example, so use pre-resolved JSON for an offline report.
 
 ### For coding agents
 
@@ -101,7 +99,7 @@ dbudoctor skill export --dir <path> [--force]
 
 Exit codes: `0` no policy violated, `1` a `fail_on` policy violated, `2` invalid input or an internal error.
 
-Settings come from flags first, then `DBUDOCTOR_*` environment variables (`DBUDOCTOR_TARGET`, `DBUDOCTOR_REGION`, `DBUDOCTOR_CLOUD`, `DBUDOCTOR_FORMAT`, …), then `.dbudoctor.yml`, then defaults. The file's JSON Schema is [schemas/dbudoctor.schema.json](schemas/dbudoctor.schema.json); the JSON report's is [schemas/report.schema.json](schemas/report.schema.json).
+Settings come from flags first, then `DBUDOCTOR_*` environment variables (`DBUDOCTOR_TARGET`, `DBUDOCTOR_REGION`, `DBUDOCTOR_CLOUD`, `DBUDOCTOR_FORMAT`, …), then `.dbudoctor.yml`, then defaults. The file's JSON Schema is [schemas/dbudoctor.schema.json](https://github.com/vuglll/DBUDoctor/blob/dev/schemas/dbudoctor.schema.json); the JSON report's is [schemas/report.schema.json](https://github.com/vuglll/DBUDoctor/blob/dev/schemas/report.schema.json).
 
 ## How estimates are made
 
@@ -113,20 +111,20 @@ Settings come from flags first, then `DBUDOCTOR_*` environment variables (`DBUDO
 - **Scaling.** When compute size changes, `constant_runtime` (default) keeps run duration, and `linear_speedup` keeps cost per run.
 - **Apps.** A Databricks App is priced as running all month: its compute size (MEDIUM 0.5, LARGE 1, XLARGE 3 DBU per hour, from `catalog/serverless.yaml`) × instances × 730 × the Interactive Serverless price (confidence Medium).
 - **Lakebase.** A Lakebase Autoscaling compute costs min CU × DBU per CU × the Database Serverless price per active hour. Always active (`no_suspension: true`), that runs 730 hours (confidence Medium), up to the max CU; with scale to zero, the rate and the ceiling are shown. AWS and Azure only.
-- **Calibration (opt-in).** With `calibration.enabled`, DBUDoctor reads the deployed resources' usage from `system.billing.usage` on a SQL warehouse you name, and prices observed DBUs per run (or per month) at the current `system.billing.list_prices`. See [docs/calibration.md](docs/calibration.md) for the grants, the cost and an example workflow.
+- **Calibration (opt-in).** With experimental calibration enabled via `calibration.enabled`, DBUDoctor reads the deployed resources' usage from `system.billing.usage` on a SQL warehouse you name, and prices observed DBUs per run (or per month) at the current `system.billing.list_prices`. See [docs/calibration.md](https://github.com/vuglll/DBUDoctor/blob/dev/docs/calibration.md) for the grants, the cost and an example workflow.
 
-The catalog is in [catalog/](catalog/). It is regenerated weekly and reviewed in a pull request: Azure from the Retail Prices API (50 regions), AWS (16 regions, 575 instance types) and GCP (15 regions, 157 machine types) from the Databricks pricing calculator data, and AWS VMs from the AWS Price List. `--refresh-prices` fetches today's Azure prices for your region instead. Every report prints the catalog date.
+The catalog is in [catalog/](https://github.com/vuglll/DBUDoctor/tree/dev/catalog). It is regenerated weekly and reviewed in a pull request: Azure from the Retail Prices API (50 regions), AWS (16 regions, 575 instance types) and GCP (15 regions, 157 machine types) from the Databricks pricing calculator data, and AWS VMs from the AWS Price List. `--refresh-prices` fetches today's Azure prices for your region instead. Every report prints the catalog date.
 
 ## Confidence levels
 
 | Level | Meaning |
 |---|---|
-| High | Calibrated from observed history ([calibration](docs/calibration.md)): enough runs or days of usage in the window. |
+| High | Calibrated from observed history ([calibration](https://github.com/vuglll/DBUDoctor/blob/dev/docs/calibration.md)): enough runs or days of usage in the window. |
 | Medium | Frequency from configuration and a configured run duration, or a resource that runs all month. |
 | Low | A comparison that is not like for like (classic compute without VM prices against serverless), thin history, or a serverless performance-mode change. |
 | Unknown | No monthly figure. The report shows the hourly rate, or "needs history". |
 
-Headline totals include High and Medium only, and say how many changes they exclude. Without history, serverless jobs and pipelines, SQL warehouses, all-purpose clusters and event-triggered jobs show rates: a rate is a fact, a guessed monthly figure is not. [Calibration](docs/calibration.md) turns them into monthly figures from what the deployed resources really used.
+Headline totals include High and Medium only, and say how many changes they exclude. Without history, serverless jobs and pipelines, SQL warehouses, all-purpose clusters and event-triggered jobs show rates: a rate is a fact, a guessed monthly figure is not. [Calibration](https://github.com/vuglll/DBUDoctor/blob/dev/docs/calibration.md) turns them into monthly figures from what the deployed resources really used.
 
 ## Costs not modeled
 
@@ -153,24 +151,24 @@ Figures are list-price estimates, not an invoice.
 
 | ID | Rule |
 |---|---|
-| [DBU001](docs/rules/DBU001.md) | Task runs on all-purpose compute |
-| [DBU002](docs/rules/DBU002.md) | All-purpose cluster auto-termination |
-| [DBU003](docs/rules/DBU003.md) | SQL warehouse auto-stop |
-| [DBU004](docs/rules/DBU004.md) | Continuous pipeline |
-| [DBU005](docs/rules/DBU005.md) | Continuous job |
-| [DBU007](docs/rules/DBU007.md) | Job without a timeout |
-| [DBU008](docs/rules/DBU008.md) | Missing cost-attribution tags |
-| [DBU009](docs/rules/DBU009.md) | Large on-demand cluster |
-| [DBU010](docs/rules/DBU010.md) | Sharp frequency increase |
-| [DBU011](docs/rules/DBU011.md) | Scheduled serverless job in performance-optimized mode |
-| [DBU012](docs/rules/DBU012.md) | Outdated or end-of-support runtime |
-| [DBU013](docs/rules/DBU013.md) | Large Databricks App |
-| [DBU014](docs/rules/DBU014.md) | Serving endpoint without scale-to-zero |
-| [DBU015](docs/rules/DBU015.md) | Lakebase endpoint sizing |
-| [DBU016](docs/rules/DBU016.md) | Classic job cluster on a short schedule |
-| [DBU017](docs/rules/DBU017.md) | Spot without fallback |
-| [DBU018](docs/rules/DBU018.md) | Pipeline cluster on legacy autoscaling |
-| [DBU019](docs/rules/DBU019.md) | Custom tag collides with a default tag |
+| [DBU001](https://github.com/vuglll/DBUDoctor/blob/dev/docs/rules/DBU001.md) | Task runs on all-purpose compute |
+| [DBU002](https://github.com/vuglll/DBUDoctor/blob/dev/docs/rules/DBU002.md) | All-purpose cluster auto-termination |
+| [DBU003](https://github.com/vuglll/DBUDoctor/blob/dev/docs/rules/DBU003.md) | SQL warehouse auto-stop |
+| [DBU004](https://github.com/vuglll/DBUDoctor/blob/dev/docs/rules/DBU004.md) | Continuous pipeline |
+| [DBU005](https://github.com/vuglll/DBUDoctor/blob/dev/docs/rules/DBU005.md) | Continuous job |
+| [DBU007](https://github.com/vuglll/DBUDoctor/blob/dev/docs/rules/DBU007.md) | Job without a timeout |
+| [DBU008](https://github.com/vuglll/DBUDoctor/blob/dev/docs/rules/DBU008.md) | Missing cost-attribution tags |
+| [DBU009](https://github.com/vuglll/DBUDoctor/blob/dev/docs/rules/DBU009.md) | Large on-demand cluster |
+| [DBU010](https://github.com/vuglll/DBUDoctor/blob/dev/docs/rules/DBU010.md) | Sharp frequency increase |
+| [DBU011](https://github.com/vuglll/DBUDoctor/blob/dev/docs/rules/DBU011.md) | Scheduled serverless job in performance-optimized mode |
+| [DBU012](https://github.com/vuglll/DBUDoctor/blob/dev/docs/rules/DBU012.md) | Outdated or end-of-support runtime |
+| [DBU013](https://github.com/vuglll/DBUDoctor/blob/dev/docs/rules/DBU013.md) | Large Databricks App |
+| [DBU014](https://github.com/vuglll/DBUDoctor/blob/dev/docs/rules/DBU014.md) | Serving endpoint without scale-to-zero |
+| [DBU015](https://github.com/vuglll/DBUDoctor/blob/dev/docs/rules/DBU015.md) | Lakebase endpoint sizing |
+| [DBU016](https://github.com/vuglll/DBUDoctor/blob/dev/docs/rules/DBU016.md) | Classic job cluster on a short schedule |
+| [DBU017](https://github.com/vuglll/DBUDoctor/blob/dev/docs/rules/DBU017.md) | Spot without fallback |
+| [DBU018](https://github.com/vuglll/DBUDoctor/blob/dev/docs/rules/DBU018.md) | Pipeline cluster on legacy autoscaling |
+| [DBU019](https://github.com/vuglll/DBUDoctor/blob/dev/docs/rules/DBU019.md) | Custom tag collides with a default tag |
 
 Findings are new-only: a finding that already exists in the base is reported only with `--report-existing`. Suppress a finding in `.dbudoctor.yml` with a reason:
 
@@ -183,11 +181,11 @@ suppressions:
 
 ## Roadmap
 
-Rules DBU001–DBU019 have shipped (DBU006 was retired), and calibration from system tables is experimental. Next: verifying calibration on real workspaces, and rules from DBU020. See [docs/roadmap.md](docs/roadmap.md).
+Rules DBU001–DBU019 have shipped (DBU006 was retired), and calibration from system tables is experimental. Next: verifying calibration on real workspaces, and rules from DBU020. See [docs/roadmap.md](https://github.com/vuglll/DBUDoctor/blob/dev/docs/roadmap.md).
 
 ## Contributing
 
-Issues and pull requests are welcome; new rules make good first contributions. See [CONTRIBUTING.md](CONTRIBUTING.md) and the [code of conduct](CODE_OF_CONDUCT.md). Report security issues privately, as described in [SECURITY.md](SECURITY.md).
+Issues and pull requests are welcome; new rules make good first contributions. See [CONTRIBUTING.md](https://github.com/vuglll/DBUDoctor/blob/dev/CONTRIBUTING.md) and the [code of conduct](https://github.com/vuglll/DBUDoctor/blob/dev/CODE_OF_CONDUCT.md). Report security issues privately, as described in [SECURITY.md](https://github.com/vuglll/DBUDoctor/blob/dev/SECURITY.md).
 
 ## License
 

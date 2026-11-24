@@ -25,7 +25,16 @@ Azure is priced in full: DBUs and VMs, per region, from the public Azure Retail 
 
 DBUDoctor needs `git` and the [Databricks CLI](https://docs.databricks.com/dev-tools/cli/install.html) v0.239.0 or later, which it uses to run `databricks bundle validate`.
 
-Install it with pip (no .NET needed; also works in a notebook as `%pip install dbudoctor`):
+To try the current source checkout, use the .NET 10 SDK:
+
+```bash
+dotnet run --project src/DBUDoctor.Cli -- diff \
+  --base-json tests/Fixtures/bundles/azure-analytics/base.json \
+  --head-json tests/Fixtures/bundles/azure-analytics/head.json \
+  --config tests/Fixtures/bundles/azure-analytics/.dbudoctor.yml
+```
+
+The public release and package channels are being set up. Once a package is published, install it with pip (no .NET needed; also works in a notebook as `%pip install dbudoctor`):
 
 ```bash
 pip install dbudoctor
@@ -67,7 +76,7 @@ dbudoctor diff --base-json base.json --head-json head.json
 
 ### In GitHub Actions
 
-See [docs/examples/dbudoctor.yml](docs/examples/dbudoctor.yml). The Action downloads the binary for the runner, verifies its checksum, and keeps one comment per bundle and target. It needs `pull-requests: write`; on pull requests from forks it writes the job summary instead.
+Once a public binary release and the `v0` Action tag are available, see [docs/examples/dbudoctor.yml](docs/examples/dbudoctor.yml). The Action downloads the binary for the runner, verifies its checksum, and keeps one comment per bundle and target. It needs `pull-requests: write`; on pull requests from forks it writes the job summary instead.
 
 ### For coding agents
 

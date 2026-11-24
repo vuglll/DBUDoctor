@@ -1,0 +1,126 @@
+{
+  "schemaVersion": 1,
+  "tool": {
+    "name": "dbudoctor",
+    "version": "0.0.0-test"
+  },
+  "exitCode": 0,
+  "policyViolated": false,
+  "bundles": [
+    {
+      "bundle": "streaming",
+      "target": "prod",
+      "root": null,
+      "cloud": "azure",
+      "region": "westeurope",
+      "currency": "USD",
+      "catalogAsOf": "2026-11-01",
+      "cloudInfraIncluded": true,
+      "commitment": "payg",
+      "tier": "premium",
+      "scaling": "constant_runtime",
+      "autoscale": "max",
+      "defaultRunMinutes": null,
+      "calibration": null,
+      "hasCostRelevantChanges": true,
+      "totals": {
+        "monthlyDelta": 0,
+        "baseMonthly": 0,
+        "percentChange": null,
+        "includedChanges": 0,
+        "excludedChanges": 1
+      },
+      "changes": [
+        {
+          "type": "jobs",
+          "key": "events_ingest",
+          "kind": "modified",
+          "summary": "schedule every 15 min → continuous",
+          "category": "rate",
+          "confidence": "Unknown",
+          "inTotals": false,
+          "monthlyDelta": null,
+          "notes": [],
+          "before": {
+            "sku": "PREMIUM_JOBS_COMPUTE",
+            "pricePerDbu": 0.3,
+            "dbuPerHour": 3.75,
+            "dbuCostPerHour": 1.125,
+            "vmCostPerHour": 1.145,
+            "ratePerHour": 2.27,
+            "serverless": false,
+            "cloudInfraIncluded": true,
+            "runsPerMonth": 2920,
+            "frequency": "every 15 min",
+            "monthly": null,
+            "monthlyCeiling": null,
+            "confidence": "Unknown",
+            "monthlyNote": "run duration unknown: set `estimation.default_run_minutes`",
+            "assumptions": [],
+            "unknownReasons": [],
+            "history": null
+          },
+          "after": {
+            "sku": "PREMIUM_JOBS_COMPUTE",
+            "pricePerDbu": 0.3,
+            "dbuPerHour": 3.75,
+            "dbuCostPerHour": 1.125,
+            "vmCostPerHour": 1.145,
+            "ratePerHour": 2.27,
+            "serverless": false,
+            "cloudInfraIncluded": true,
+            "runsPerMonth": null,
+            "frequency": "continuous",
+            "monthly": 1657.1,
+            "monthlyCeiling": null,
+            "confidence": "Medium",
+            "monthlyNote": null,
+            "assumptions": [
+              "continuous: runs all month (730 h)"
+            ],
+            "unknownReasons": [],
+            "history": null
+          }
+        }
+      ],
+      "findings": [
+        {
+          "ruleId": "DBU005",
+          "severity": "warning",
+          "resourceType": "jobs",
+          "resourceKey": "events_ingest",
+          "fieldPath": "continuous",
+          "message": "job `events_ingest` is continuous: a new run starts within a minute of the last, so it runs around the clock at $2.27 per hour, about $1,657 a month.",
+          "docsUrl": "https://github.com/vuglll/DBUDoctor/blob/main/docs/rules/DBU005.md",
+          "existing": false,
+          "location": null
+        }
+      ],
+      "suppressedFindings": 0,
+      "existingFindingsHidden": 0,
+      "possibleRenames": [],
+      "notPriced": [],
+      "assumptions": [
+        "Prices: Azure westeurope, Premium tier, pay-as-you-go VMs, catalog 2026-11-01.",
+        "Scaling: constant runtime. Autoscale: at max.",
+        "Run duration: not set, so scheduled classic jobs show rates only (set estimation.default_run_minutes)."
+      ],
+      "notModeled": [
+        "managed disks",
+        "blob storage",
+        "public IP addresses",
+        "network egress",
+        "NAT",
+        "storage",
+        "idle VMs in instance pools",
+        "VM time during cluster startup"
+      ],
+      "warnings": [],
+      "policy": {
+        "violated": false,
+        "violations": [],
+        "notes": []
+      }
+    }
+  ]
+}

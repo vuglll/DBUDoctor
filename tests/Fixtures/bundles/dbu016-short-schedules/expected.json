@@ -1,0 +1,135 @@
+{
+  "schemaVersion": 1,
+  "tool": {
+    "name": "dbudoctor",
+    "version": "0.0.0-test"
+  },
+  "exitCode": 0,
+  "policyViolated": false,
+  "bundles": [
+    {
+      "bundle": "sync",
+      "target": "prod",
+      "root": null,
+      "cloud": "azure",
+      "region": "westeurope",
+      "currency": "USD",
+      "catalogAsOf": "2026-11-01",
+      "cloudInfraIncluded": true,
+      "commitment": "payg",
+      "tier": "premium",
+      "scaling": "constant_runtime",
+      "autoscale": "max",
+      "defaultRunMinutes": null,
+      "calibration": null,
+      "hasCostRelevantChanges": true,
+      "totals": {
+        "monthlyDelta": 0,
+        "baseMonthly": 0,
+        "percentChange": null,
+        "includedChanges": 0,
+        "excludedChanges": 1
+      },
+      "changes": [
+        {
+          "type": "jobs",
+          "key": "orders_sync",
+          "kind": "modified",
+          "summary": "schedule every 30 min → every 5 min",
+          "category": "rate",
+          "confidence": "Unknown",
+          "inTotals": false,
+          "monthlyDelta": null,
+          "notes": [],
+          "before": {
+            "sku": "PREMIUM_JOBS_COMPUTE",
+            "pricePerDbu": 0.3,
+            "dbuPerHour": 2.25,
+            "dbuCostPerHour": 0.675,
+            "vmCostPerHour": 0.687,
+            "ratePerHour": 1.362,
+            "serverless": false,
+            "cloudInfraIncluded": true,
+            "runsPerMonth": 1460,
+            "frequency": "every 30 min",
+            "monthly": null,
+            "monthlyCeiling": null,
+            "confidence": "Unknown",
+            "monthlyNote": "run duration unknown: set `estimation.default_run_minutes`",
+            "assumptions": [],
+            "unknownReasons": [],
+            "history": null
+          },
+          "after": {
+            "sku": "PREMIUM_JOBS_COMPUTE",
+            "pricePerDbu": 0.3,
+            "dbuPerHour": 2.25,
+            "dbuCostPerHour": 0.675,
+            "vmCostPerHour": 0.687,
+            "ratePerHour": 1.362,
+            "serverless": false,
+            "cloudInfraIncluded": true,
+            "runsPerMonth": 8760,
+            "frequency": "every 5 min",
+            "monthly": null,
+            "monthlyCeiling": null,
+            "confidence": "Unknown",
+            "monthlyNote": "run duration unknown: set `estimation.default_run_minutes`",
+            "assumptions": [],
+            "unknownReasons": [],
+            "history": null
+          }
+        }
+      ],
+      "findings": [
+        {
+          "ruleId": "DBU010",
+          "severity": "warning",
+          "resourceType": "jobs",
+          "resourceKey": "orders_sync",
+          "fieldPath": "schedule.quartz_cron_expression",
+          "message": "job `orders_sync` runs 6.0× as often (1,460 → 8,760 runs / month). Cron `0 0/30 * * * ?` → `0 0/5 * * * ?`.",
+          "docsUrl": "https://github.com/vuglll/DBUDoctor/blob/main/docs/rules/DBU010.md",
+          "existing": false,
+          "location": null
+        },
+        {
+          "ruleId": "DBU016",
+          "severity": "info",
+          "resourceType": "jobs",
+          "resourceKey": "orders_sync",
+          "fieldPath": "schedule.quartz_cron_expression",
+          "message": "job `orders_sync` runs every 5 min on job cluster `main`, which has no instance pool: it starts a cluster about 8,760 times a month, and every run pays for start-up. Consider serverless, an `instance_pool_id`, or a continuous job.",
+          "docsUrl": "https://github.com/vuglll/DBUDoctor/blob/main/docs/rules/DBU016.md",
+          "existing": false,
+          "location": null
+        }
+      ],
+      "suppressedFindings": 0,
+      "existingFindingsHidden": 4,
+      "possibleRenames": [],
+      "notPriced": [],
+      "assumptions": [
+        "Prices: Azure westeurope, Premium tier, pay-as-you-go VMs, catalog 2026-11-01.",
+        "Scaling: constant runtime. Autoscale: at max.",
+        "Run duration: not set, so scheduled classic jobs show rates only (set estimation.default_run_minutes)."
+      ],
+      "notModeled": [
+        "managed disks",
+        "blob storage",
+        "public IP addresses",
+        "network egress",
+        "NAT",
+        "storage",
+        "idle VMs in instance pools",
+        "VM time during cluster startup"
+      ],
+      "warnings": [],
+      "policy": {
+        "violated": false,
+        "violations": [],
+        "notes": []
+      }
+    }
+  ]
+}

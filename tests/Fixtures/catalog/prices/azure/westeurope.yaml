@@ -1,0 +1,31 @@
+# Test catalog: fixed values for golden files and unit tests, so the weekly Azure refresh never
+# changes test output. The values follow the design's seed prices.
+cloud: azure
+region: westeurope
+currency: USD
+as_of: 2026-11-01
+source: test fixture
+dbu:
+  PREMIUM_JOBS_COMPUTE: 0.30
+  PREMIUM_JOBS_COMPUTE_PHOTON: 0.30
+  PREMIUM_ALL_PURPOSE_COMPUTE: 0.55
+  PREMIUM_ALL_PURPOSE_COMPUTE_PHOTON: 0.55
+  PREMIUM_DLT_CORE_COMPUTE: 0.30
+  PREMIUM_DLT_CORE_COMPUTE_PHOTON: 0.30
+  PREMIUM_DLT_PRO_COMPUTE: 0.38
+  PREMIUM_DLT_PRO_COMPUTE_PHOTON: 0.38
+  PREMIUM_DLT_ADVANCED_COMPUTE: 0.54
+  PREMIUM_DLT_ADVANCED_COMPUTE_PHOTON: 0.54
+  PREMIUM_SQL_COMPUTE: 0.22
+  PREMIUM_SQL_PRO_COMPUTE: 0.55
+  PREMIUM_SERVERLESS_SQL_COMPUTE: 0.70
+  PREMIUM_JOBS_SERVERLESS_COMPUTE: 0.47
+  PREMIUM_ALL_PURPOSE_SERVERLESS_COMPUTE: 1.00
+  PREMIUM_DATABASE_SERVERLESS_COMPUTE: 0.30
+vm:
+  Standard_DS3_v2: { payg: 0.229, spot: 0.05, reserved_1y: 0.15, reserved_3y: 0.10, savings_plan_1y: 0.18, savings_plan_3y: 0.13 }
+  Standard_DS4_v2: { payg: 0.458, spot: 0.10, reserved_1y: 0.30, reserved_3y: 0.20, savings_plan_1y: 0.36, savings_plan_3y: 0.26 }
+  Standard_E8ds_v4: { payg: 0.50, reserved_3y: 0.25 }
+  Standard_E16ds_v4: { payg: 1.00, reserved_3y: 0.50 }
+  Standard_E32ds_v4: { payg: 2.00, reserved_3y: 1.00 }
+  Standard_E64ds_v4: { payg: 4.00, reserved_3y: 2.00 }

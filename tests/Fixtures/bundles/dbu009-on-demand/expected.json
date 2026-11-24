@@ -1,0 +1,194 @@
+{
+  "schemaVersion": 1,
+  "tool": {
+    "name": "dbudoctor",
+    "version": "0.0.0-test"
+  },
+  "exitCode": 0,
+  "policyViolated": false,
+  "bundles": [
+    {
+      "bundle": "batch",
+      "target": "prod",
+      "root": null,
+      "cloud": "azure",
+      "region": "westeurope",
+      "currency": "USD",
+      "catalogAsOf": "2026-11-01",
+      "cloudInfraIncluded": true,
+      "commitment": "payg",
+      "tier": "premium",
+      "scaling": "constant_runtime",
+      "autoscale": "max",
+      "defaultRunMinutes": null,
+      "calibration": null,
+      "hasCostRelevantChanges": true,
+      "totals": {
+        "monthlyDelta": 0,
+        "baseMonthly": 0,
+        "percentChange": null,
+        "includedChanges": 0,
+        "excludedChanges": 3
+      },
+      "changes": [
+        {
+          "type": "jobs",
+          "key": "default_avail",
+          "kind": "added",
+          "summary": "added, no schedule",
+          "category": "rate",
+          "confidence": "Unknown",
+          "inTotals": false,
+          "monthlyDelta": null,
+          "notes": [],
+          "before": null,
+          "after": {
+            "sku": "PREMIUM_JOBS_COMPUTE",
+            "pricePerDbu": 0.3,
+            "dbuPerHour": 12.75,
+            "dbuCostPerHour": 3.825,
+            "vmCostPerHour": 3.893,
+            "ratePerHour": 7.718,
+            "serverless": false,
+            "cloudInfraIncluded": true,
+            "runsPerMonth": null,
+            "frequency": "no schedule",
+            "monthly": null,
+            "monthlyCeiling": null,
+            "confidence": "Unknown",
+            "monthlyNote": "no schedule or trigger (runs on demand)",
+            "assumptions": [
+              "autoscale at max: job cluster `main` priced with 16 workers (2–16)"
+            ],
+            "unknownReasons": [],
+            "history": null
+          }
+        },
+        {
+          "type": "jobs",
+          "key": "nightly",
+          "kind": "modified",
+          "summary": "job_clusters[main].new_cluster.azure_attributes.availability `SPOT_WITH_FALLBACK_AZURE` → `ON_DEMAND_AZURE`",
+          "category": "rate",
+          "confidence": "Unknown",
+          "inTotals": false,
+          "monthlyDelta": null,
+          "notes": [],
+          "before": {
+            "sku": "PREMIUM_JOBS_COMPUTE",
+            "pricePerDbu": 0.3,
+            "dbuPerHour": 12.75,
+            "dbuCostPerHour": 3.825,
+            "vmCostPerHour": 3.893,
+            "ratePerHour": 7.718,
+            "serverless": false,
+            "cloudInfraIncluded": true,
+            "runsPerMonth": null,
+            "frequency": "no schedule",
+            "monthly": null,
+            "monthlyCeiling": null,
+            "confidence": "Unknown",
+            "monthlyNote": "no schedule or trigger (runs on demand)",
+            "assumptions": [
+              "autoscale at max: job cluster `main` priced with 16 workers (2–16)"
+            ],
+            "unknownReasons": [],
+            "history": null
+          },
+          "after": {
+            "sku": "PREMIUM_JOBS_COMPUTE",
+            "pricePerDbu": 0.3,
+            "dbuPerHour": 12.75,
+            "dbuCostPerHour": 3.825,
+            "vmCostPerHour": 3.893,
+            "ratePerHour": 7.718,
+            "serverless": false,
+            "cloudInfraIncluded": true,
+            "runsPerMonth": null,
+            "frequency": "no schedule",
+            "monthly": null,
+            "monthlyCeiling": null,
+            "confidence": "Unknown",
+            "monthlyNote": "no schedule or trigger (runs on demand)",
+            "assumptions": [
+              "autoscale at max: job cluster `main` priced with 16 workers (2–16)"
+            ],
+            "unknownReasons": [],
+            "history": null
+          }
+        },
+        {
+          "type": "jobs",
+          "key": "small",
+          "kind": "added",
+          "summary": "added, no schedule",
+          "category": "rate",
+          "confidence": "Unknown",
+          "inTotals": false,
+          "monthlyDelta": null,
+          "notes": [],
+          "before": null,
+          "after": {
+            "sku": "PREMIUM_JOBS_COMPUTE",
+            "pricePerDbu": 0.3,
+            "dbuPerHour": 3.75,
+            "dbuCostPerHour": 1.125,
+            "vmCostPerHour": 1.145,
+            "ratePerHour": 2.27,
+            "serverless": false,
+            "cloudInfraIncluded": true,
+            "runsPerMonth": null,
+            "frequency": "no schedule",
+            "monthly": null,
+            "monthlyCeiling": null,
+            "confidence": "Unknown",
+            "monthlyNote": "no schedule or trigger (runs on demand)",
+            "assumptions": [
+              "autoscale at max: job cluster `main` priced with 4 workers (2–4)"
+            ],
+            "unknownReasons": [],
+            "history": null
+          }
+        }
+      ],
+      "findings": [
+        {
+          "ruleId": "DBU009",
+          "severity": "info",
+          "resourceType": "jobs",
+          "resourceKey": "nightly",
+          "fieldPath": "job_clusters[main].new_cluster.azure_attributes.availability",
+          "message": "job `nightly`, job cluster `main` runs up to 16 workers on on-demand VMs (`ON_DEMAND_AZURE`). Spot with fallback (`SPOT_WITH_FALLBACK_AZURE`) with `first_on_demand: 1` keeps the driver on demand. Spot workers would save up to $2.86 per hour on VMs (16 × `Standard_DS3_v2` at $0.23 on demand against $0.05 spot, catalog prices).",
+          "docsUrl": "https://github.com/vuglll/DBUDoctor/blob/main/docs/rules/DBU009.md",
+          "existing": false,
+          "location": null
+        }
+      ],
+      "suppressedFindings": 0,
+      "existingFindingsHidden": 0,
+      "possibleRenames": [],
+      "notPriced": [],
+      "assumptions": [
+        "Prices: Azure westeurope, Premium tier, pay-as-you-go VMs, catalog 2026-11-01.",
+        "Scaling: constant runtime. Autoscale: at max.",
+        "Run duration: not set, so scheduled classic jobs show rates only (set estimation.default_run_minutes)."
+      ],
+      "notModeled": [
+        "managed disks",
+        "blob storage",
+        "public IP addresses",
+        "network egress",
+        "NAT",
+        "storage",
+        "idle VMs in instance pools",
+        "VM time during cluster startup"
+      ],
+      "warnings": [],
+      "policy": {
+        "violated": false,
+        "violations": [],
+        "notes": []
+      }
+    }
+  ]
+}

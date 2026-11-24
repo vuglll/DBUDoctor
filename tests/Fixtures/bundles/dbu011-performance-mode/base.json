@@ -1,0 +1,32 @@
+{
+  "bundle": {
+    "name": "reports",
+    "target": "prod",
+    "mode": "production"
+  },
+  "workspace": {
+    "host": "https://adb-1234567890123456.7.azuredatabricks.net"
+  },
+  "resources": {
+    "jobs": {
+      "nightly": {
+        "name": "j",
+        "timeout_seconds": 3600,
+        "schedule": {
+          "quartz_cron_expression": "0 0 2 * * ?",
+          "timezone_id": "UTC"
+        },
+        "tasks": [
+          {
+            "task_key": "t",
+            "environment_key": "default",
+            "notebook_task": {
+              "notebook_path": "/x"
+            }
+          }
+        ],
+        "performance_target": "STANDARD"
+      }
+    }
+  }
+}

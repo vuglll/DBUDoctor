@@ -1,0 +1,14 @@
+# Databricks Runtime end-of-support dates (DBU012). LTS releases only: non-LTS releases end six
+# months after release and are not listed. Runtimes 18 and later are left out until their
+# spark_version format is documented. Versions older than the oldest entry are past end of
+# support ("Databricks Runtime 10.4 LTS and earlier have reached end-of-life").
+as_of: 2026-11-09
+source: https://docs.databricks.com/aws/en/release-notes/runtime/
+runtimes:
+  "17.3": { end_of_support: 2028-10-22 }
+  "16.4": { end_of_support: 2028-05-09 }
+  "15.4": { end_of_support: 2027-08-19 }
+  "14.3": { end_of_support: 2027-02-01 }
+  "13.3": { end_of_support: 2026-08-22, source: https://docs.databricks.com/aws/en/release-notes/runtime/eos }
+  "12.2": { end_of_support: 2026-03-01, source: https://docs.databricks.com/aws/en/release-notes/runtime/eos }
+  "11.3": { end_of_support: 2025-10-19, source: https://docs.databricks.com/aws/en/release-notes/runtime/eos }

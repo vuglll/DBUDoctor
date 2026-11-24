@@ -1,0 +1,66 @@
+{
+  "bundle": {
+    "name": "finance",
+    "target": "prod",
+    "mode": "production"
+  },
+  "workspace": {
+    "host": "https://adb-1234567890123456.7.azuredatabricks.net"
+  },
+  "resources": {
+    "jobs": {
+      "ledger": {
+        "name": "j",
+        "timeout_seconds": 3600,
+        "job_clusters": [
+          {
+            "job_cluster_key": "main",
+            "new_cluster": {
+              "spark_version": "16.4.x-scala2.12",
+              "node_type_id": "Standard_DS3_v2",
+              "num_workers": 2,
+              "custom_tags": {
+                "team": "fin"
+              }
+            }
+          }
+        ],
+        "tasks": [
+          {
+            "task_key": "t",
+            "job_cluster_key": "main",
+            "notebook_task": {
+              "notebook_path": "/x"
+            }
+          }
+        ]
+      },
+      "old": {
+        "name": "j",
+        "timeout_seconds": 3600,
+        "job_clusters": [
+          {
+            "job_cluster_key": "main",
+            "new_cluster": {
+              "spark_version": "16.4.x-scala2.12",
+              "node_type_id": "Standard_DS3_v2",
+              "num_workers": 2,
+              "custom_tags": {
+                "Creator": "svc"
+              }
+            }
+          }
+        ],
+        "tasks": [
+          {
+            "task_key": "t",
+            "job_cluster_key": "main",
+            "notebook_task": {
+              "notebook_path": "/x"
+            }
+          }
+        ]
+      }
+    }
+  }
+}

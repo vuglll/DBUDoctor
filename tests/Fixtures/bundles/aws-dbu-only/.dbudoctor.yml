@@ -1,0 +1,5 @@
+region: us-east-1
+estimation:
+  default_run_minutes: 15
+fail_on:
+  rules: [DBU001]

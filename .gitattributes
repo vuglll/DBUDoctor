@@ -1,0 +1,3 @@
+# LF everywhere: golden files, the generated skill and the catalog are compared byte for byte.
+* text=auto eol=lf
+*.png binary

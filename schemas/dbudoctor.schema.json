@@ -1,0 +1,217 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/vuglll/DBUDoctor/blob/main/schemas/dbudoctor.schema.json",
+  "title": ".dbudoctor.yml",
+  "description": "DBUDoctor repository configuration. Precedence: command-line flags, then DBUDOCTOR_* environment variables, then this file, then defaults.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "target": { "type": "string", "description": "Bundle target to estimate. Default: the first target with mode: production." },
+    "bundles": { "type": "array", "items": { "type": "string" }, "description": "Bundle roots relative to the repository. Default: every directory with a databricks.yml outside hidden and vendored directories." },
+    "cloud": { "enum": ["azure", "aws", "gcp"], "description": "Inferred from workspace.host when omitted: *.azuredatabricks.net is Azure, *.gcp.databricks.com is GCP, anything else AWS." },
+    "region": { "type": "string", "description": "Cloud region, such as westeurope or us-east-1. Required for region-specific prices." },
+    "currency": { "const": "USD", "default": "USD" },
+    "pricing": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "discounts": {
+          "type": "object",
+          "description": "Fraction off list $/DBU by product family. 'all' applies to every family; a family key overrides it.",
+          "additionalProperties": false,
+          "properties": {
+            "all": { "$ref": "#/$defs/fraction" },
+            "all_purpose": { "$ref": "#/$defs/fraction" },
+            "all_purpose_serverless": { "$ref": "#/$defs/fraction" },
+            "database": { "$ref": "#/$defs/fraction" },
+            "jobs": { "$ref": "#/$defs/fraction" },
+            "jobs_serverless": { "$ref": "#/$defs/fraction" },
+            "pipelines": { "$ref": "#/$defs/fraction" },
+            "sql": { "$ref": "#/$defs/fraction" }
+          }
+        },
+        "surcharge": { "type": "number", "minimum": 0, "default": 0, "description": "Fraction of list DBU spend added on top, such as 0.30 for the Azure Mission Critical add-on." },
+        "overrides": {
+          "type": "object",
+          "description": "Exact $/DBU by SKU. Discounts and surcharges do not apply to an override.",
+          "additionalProperties": false,
+          "patternProperties": {
+            "^PREMIUM_(ALL_PURPOSE_COMPUTE|ALL_PURPOSE_COMPUTE_PHOTON|ALL_PURPOSE_SERVERLESS_COMPUTE|DLT_ADVANCED_COMPUTE|DLT_ADVANCED_COMPUTE_PHOTON|DLT_CORE_COMPUTE|DLT_CORE_COMPUTE_PHOTON|DLT_PRO_COMPUTE|DLT_PRO_COMPUTE_PHOTON|JOBS_COMPUTE|JOBS_COMPUTE_PHOTON|JOBS_SERVERLESS_COMPUTE|SERVERLESS_SQL_COMPUTE|SQL_COMPUTE|SQL_PRO_COMPUTE)$": { "type": "number", "exclusiveMinimum": 0 }
+          }
+        },
+        "tier": { "enum": ["premium", "enterprise"], "default": "premium", "description": "List price tier. AWS and GCP publish Premium and Enterprise prices; Azure has Premium only." },
+        "include_cloud_infra": { "enum": ["auto", true, false, "true", "false"], "default": "auto", "description": "Add cloud VM cost to classic compute. auto: when the catalog has VM prices for the cloud and region." },
+        "infra": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "commitment": { "enum": ["payg", "spot", "reserved_1y", "reserved_3y", "savings_plan_1y", "savings_plan_3y"], "default": "payg", "description": "The VM price column." }
+          }
+        }
+      }
+    },
+    "estimation": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "autoscale": { "enum": ["max", "mid", "min"], "default": "max" },
+        "scaling": { "enum": ["constant_runtime", "linear_speedup"], "default": "constant_runtime" },
+        "default_run_minutes": { "type": "number", "exclusiveMinimum": 0, "description": "Run duration that turns schedules into monthly figures (confidence Medium). Not set by default." },
+        "instance_pools": {
+          "type": "object",
+          "description": "Node type per instance pool ID. Pools are workspace objects the bundle does not show; without a mapping, pool-backed clusters are Unknown.",
+          "additionalProperties": { "type": "string", "minLength": 1 },
+          "examples": [{ "0101-120000-pool-abc": "Standard_DS3_v2" }]
+        },
+        "standard_mode_factor": { "type": "number", "exclusiveMinimum": 0, "maximum": 1, "default": 0.7, "description": "With calibration: DBUs in serverless standard performance mode relative to performance-optimized, applied when a job's performance_target changes (confidence Low)." }
+      }
+    },
+    "calibration": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Monthly figures from usage history in system tables. Read-only queries run on the named SQL warehouse and are cached per UTC day.",
+      "properties": {
+        "enabled": { "type": "boolean", "default": false },
+        "warehouse_id": { "type": "string", "pattern": "^[0-9a-f]{16}$", "description": "The SQL warehouse that runs the history queries. Required when enabled." },
+        "target": { "type": "string", "description": "The bundle target whose deployed resources hold the history. Default: the estimation target." },
+        "window_days": { "type": "integer", "minimum": 1, "maximum": 365, "default": 30 },
+        "min_runs": { "type": "integer", "minimum": 1, "maximum": 10000, "default": 5, "description": "Runs needed for confidence High; 7 days of usage also qualify." }
+      },
+      "if": { "properties": { "enabled": { "const": true } }, "required": ["enabled"] },
+      "then": { "required": ["warehouse_id"] }
+    },
+    "rules": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "DBU001": { "$ref": "#/$defs/rule" },
+        "DBU002": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "enabled": { "type": "boolean" },
+            "severity": { "$ref": "#/$defs/severity" },
+            "max_minutes": { "type": "number", "exclusiveMinimum": 0, "default": 60, "description": "Longest idle time, in minutes, before a cluster should terminate." }
+          }
+        },
+        "DBU003": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "enabled": { "type": "boolean" },
+            "severity": { "$ref": "#/$defs/severity" },
+            "max_minutes": { "type": "number", "exclusiveMinimum": 0, "default": 30, "description": "Longest idle time, in minutes, before a warehouse should stop." }
+          }
+        },
+        "DBU004": { "$ref": "#/$defs/rule" },
+        "DBU005": { "$ref": "#/$defs/rule" },
+        "DBU007": { "$ref": "#/$defs/rule" },
+        "DBU008": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "enabled": { "type": "boolean" },
+            "severity": { "$ref": "#/$defs/severity" },
+            "required_tags": { "type": "array", "items": { "type": "string", "minLength": 1 }, "default": [], "description": "Tag keys every priced resource must carry. Empty turns the rule off." }
+          }
+        },
+        "DBU009": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "enabled": { "type": "boolean" },
+            "severity": { "$ref": "#/$defs/severity" },
+            "min_workers": { "type": "number", "exclusiveMinimum": 0, "default": 8, "description": "Worker count from which an on-demand cluster is reported." }
+          }
+        },
+        "DBU010": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "enabled": { "type": "boolean" },
+            "severity": { "$ref": "#/$defs/severity" },
+            "factor": { "type": "number", "exclusiveMinimum": 0, "default": 4 },
+            "min_runs": { "type": "number", "exclusiveMinimum": 0, "default": 100 }
+          }
+        },
+        "DBU011": { "$ref": "#/$defs/rule" },
+        "DBU012": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "enabled": { "type": "boolean" },
+            "severity": { "$ref": "#/$defs/severity" },
+            "warn_days": { "type": "number", "exclusiveMinimum": 0, "default": 90, "description": "Days before end of support at which the rule starts reporting (info)." }
+          }
+        },
+        "DBU017": { "$ref": "#/$defs/rule" },
+        "DBU018": { "$ref": "#/$defs/rule" },
+        "DBU019": { "$ref": "#/$defs/rule" },
+        "DBU013": { "$ref": "#/$defs/rule" },
+        "DBU014": { "$ref": "#/$defs/rule" },
+        "DBU015": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "enabled": { "type": "boolean" },
+            "severity": { "$ref": "#/$defs/severity" },
+            "max_min_cu": { "type": "number", "exclusiveMinimum": 0, "default": 8, "description": "Minimum CU from which a compute is reported (info)." },
+            "production_branches": { "type": "array", "items": { "type": "string", "minLength": 1 }, "default": [], "description": "Branch IDs that count as production besides `production`." }
+          }
+        },
+        "DBU016": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "enabled": { "type": "boolean" },
+            "severity": { "$ref": "#/$defs/severity" },
+            "min_interval_minutes": { "type": "number", "exclusiveMinimum": 0, "default": 15, "description": "Shortest acceptable interval, in minutes, between runs on a classic job cluster." }
+          }
+        }
+      }
+    },
+    "suppressions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["rule", "resource", "reason"],
+        "properties": {
+          "rule": { "type": "string", "pattern": "^DBU[0-9]{3}$" },
+          "resource": { "type": "string", "pattern": "^[a-z_]+\\..+$", "description": "<type>.<key>; * and ? wildcards allowed, such as jobs.legacy_*." },
+          "reason": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "report": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "comment_on_no_change": { "type": "boolean", "default": false }
+      }
+    },
+    "fail_on": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "monthly_increase": { "type": "number", "minimum": 0 },
+        "percent_increase": { "type": "number", "minimum": 0, "description": "Skipped when the base total of changed resources is 0." },
+        "severity": { "$ref": "#/$defs/severity" },
+        "rules": { "type": "array", "items": { "type": "string", "pattern": "^DBU[0-9]{3}$" } },
+        "unknown_cost": { "type": "boolean", "default": false }
+      }
+    }
+  },
+  "$defs": {
+    "fraction": { "type": "number", "minimum": 0, "exclusiveMaximum": 1 },
+    "severity": { "enum": ["info", "warning", "error"] },
+    "rule": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "severity": { "$ref": "#/$defs/severity" }
+      }
+    }
+  }
+}

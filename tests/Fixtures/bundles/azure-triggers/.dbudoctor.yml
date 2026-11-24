@@ -1,0 +1,10 @@
+region: westeurope
+pricing:
+  discounts:
+    all: 0.20
+estimation:
+  default_run_minutes: 30
+suppressions:
+  - rule: DBU010
+    resource: jobs.paused
+    reason: Unpausing the daily load is the point of this change (DATA-12)

@@ -1,0 +1,128 @@
+{
+  "schemaVersion": 1,
+  "tool": {
+    "name": "dbudoctor",
+    "version": "0.0.0-test"
+  },
+  "exitCode": 0,
+  "policyViolated": false,
+  "bundles": [
+    {
+      "bundle": "streams",
+      "target": "prod",
+      "root": null,
+      "cloud": "azure",
+      "region": "westeurope",
+      "currency": "USD",
+      "catalogAsOf": "2026-11-01",
+      "cloudInfraIncluded": true,
+      "commitment": "payg",
+      "tier": "premium",
+      "scaling": "constant_runtime",
+      "autoscale": "max",
+      "defaultRunMinutes": null,
+      "calibration": null,
+      "hasCostRelevantChanges": true,
+      "totals": {
+        "monthlyDelta": 0,
+        "baseMonthly": 0,
+        "percentChange": null,
+        "includedChanges": 0,
+        "excludedChanges": 1
+      },
+      "changes": [
+        {
+          "type": "pipelines",
+          "key": "events",
+          "kind": "modified",
+          "summary": "clusters[default].autoscale.mode `ENHANCED` → `LEGACY`",
+          "category": "rate",
+          "confidence": "Unknown",
+          "inTotals": false,
+          "monthlyDelta": null,
+          "notes": [],
+          "before": {
+            "sku": "PREMIUM_DLT_CORE_COMPUTE",
+            "pricePerDbu": 0.3,
+            "dbuPerHour": 6.75,
+            "dbuCostPerHour": 2.025,
+            "vmCostPerHour": 2.061,
+            "ratePerHour": 4.086,
+            "serverless": false,
+            "cloudInfraIncluded": true,
+            "runsPerMonth": null,
+            "frequency": null,
+            "monthly": null,
+            "monthlyCeiling": null,
+            "confidence": "Unknown",
+            "monthlyNote": "triggered pipeline: runs come from the jobs or schedules that start it",
+            "assumptions": [
+              "autoscale at max: pipeline cluster priced with 8 workers (1–8)"
+            ],
+            "unknownReasons": [],
+            "history": null
+          },
+          "after": {
+            "sku": "PREMIUM_DLT_CORE_COMPUTE",
+            "pricePerDbu": 0.3,
+            "dbuPerHour": 6.75,
+            "dbuCostPerHour": 2.025,
+            "vmCostPerHour": 2.061,
+            "ratePerHour": 4.086,
+            "serverless": false,
+            "cloudInfraIncluded": true,
+            "runsPerMonth": null,
+            "frequency": null,
+            "monthly": null,
+            "monthlyCeiling": null,
+            "confidence": "Unknown",
+            "monthlyNote": "triggered pipeline: runs come from the jobs or schedules that start it",
+            "assumptions": [
+              "autoscale at max: pipeline cluster priced with 8 workers (1–8)"
+            ],
+            "unknownReasons": [],
+            "history": null
+          }
+        }
+      ],
+      "findings": [
+        {
+          "ruleId": "DBU018",
+          "severity": "info",
+          "resourceType": "pipelines",
+          "resourceKey": "events",
+          "fieldPath": "clusters[default].autoscale.mode",
+          "message": "pipeline `events`, cluster `default` uses legacy autoscaling (`autoscale.mode: LEGACY`): enhanced autoscaling adds and removes workers as the workload changes, and it is the default for new pipelines. Set `mode: ENHANCED`.",
+          "docsUrl": "https://github.com/vuglll/DBUDoctor/blob/main/docs/rules/DBU018.md",
+          "existing": false,
+          "location": null
+        }
+      ],
+      "suppressedFindings": 0,
+      "existingFindingsHidden": 0,
+      "possibleRenames": [],
+      "notPriced": [],
+      "assumptions": [
+        "Prices: Azure westeurope, Premium tier, pay-as-you-go VMs, catalog 2026-11-01.",
+        "Scaling: constant runtime. Autoscale: at max.",
+        "Run duration: not set, so scheduled classic jobs show rates only (set estimation.default_run_minutes)."
+      ],
+      "notModeled": [
+        "managed disks",
+        "blob storage",
+        "public IP addresses",
+        "network egress",
+        "NAT",
+        "storage",
+        "idle VMs in instance pools",
+        "VM time during cluster startup"
+      ],
+      "warnings": [],
+      "policy": {
+        "violated": false,
+        "violations": [],
+        "notes": []
+      }
+    }
+  ]
+}

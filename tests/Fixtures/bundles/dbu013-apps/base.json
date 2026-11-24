@@ -1,0 +1,18 @@
+{
+  "bundle": {
+    "name": "portal",
+    "target": "prod",
+    "mode": "production"
+  },
+  "workspace": {
+    "host": "https://adb-1234567890123456.7.azuredatabricks.net"
+  },
+  "resources": {
+    "apps": {
+      "portal": {
+        "name": "portal",
+        "compute_size": "MEDIUM"
+      }
+    }
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "bundle": { "name": "analytics", "target": "prod", "mode": "production" },
+  "workspace": { "host": "https://adb-1234567890123456.7.azuredatabricks.net" },
+  "resources": {
+    "jobs": {
+      "orders_sync": {
+        "name": "orders_sync",
+        "description": "Syncs orders every 15 minutes",
+        "job_clusters": [
+          { "job_cluster_key": "main", "new_cluster": { "spark_version": "15.4.x-scala2.12", "node_type_id": "Standard_DS3_v2", "num_workers": 4 } }
+        ],
+        "tasks": [
+          { "task_key": "sync", "job_cluster_key": "main", "notebook_task": { "notebook_path": "/Workspace/analytics/sync" } }
+        ],
+        "schedule": { "quartz_cron_expression": "0 0/15 * * * ?", "timezone_id": "UTC" }
+      },
+      "report_refresh": {
+        "name": "report_refresh",
+        "tasks": [
+          { "task_key": "refresh", "existing_cluster_id": "0601-182128-dcbte59m", "notebook_task": { "notebook_path": "/Workspace/analytics/refresh" } }
+        ],
+        "schedule": { "quartz_cron_expression": "0 0 6 * * ?", "timezone_id": "Europe/Amsterdam" }
+      }
+    },
+    "pipelines": {
+      "events": {
+        "name": "events",
+        "continuous": true,
+        "edition": "CORE",
+        "clusters": [
+          { "label": "default", "node_type_id": "Standard_DS3_v2", "autoscale": { "min_workers": 1, "max_workers": 2, "mode": "ENHANCED" } }
+        ],
+        "libraries": [ { "notebook": { "path": "/Workspace/analytics/events" } } ]
+      }
+    },
+    "sql_warehouses": {
+      "bi_wh": { "name": "bi", "cluster_size": "Medium", "min_num_clusters": 1, "max_num_clusters": 2, "auto_stop_mins": 10, "warehouse_type": "PRO", "enable_serverless_compute": true }
+    }
+  }
+}

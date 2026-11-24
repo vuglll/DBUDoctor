@@ -1,0 +1,6 @@
+# Platform defaults that apply when a bundle omits a field (design of add-dbu003-warehouse-auto-stop).
+# Bundles deploy through the REST APIs, so these are the API defaults, not the UI defaults.
+as_of: 2026-11-09
+source: https://docs.databricks.com/api/workspace/warehouses/create
+sql_warehouse:
+  auto_stop_mins: 120

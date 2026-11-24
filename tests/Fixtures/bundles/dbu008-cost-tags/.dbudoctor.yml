@@ -1,0 +1,4 @@
+region: westeurope
+rules:
+  DBU008:
+    required_tags: [team, cost_center]

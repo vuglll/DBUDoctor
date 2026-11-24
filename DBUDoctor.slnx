@@ -1,0 +1,14 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/DBUDoctor.Cli/DBUDoctor.Cli.csproj" />
+    <Project Path="src/DBUDoctor.Core/DBUDoctor.Core.csproj" />
+    <Project Path="src/DBUDoctor.Databricks/DBUDoctor.Databricks.csproj" />
+    <Project Path="src/DBUDoctor.GitHub/DBUDoctor.GitHub.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/DBUDoctor.Tests/DBUDoctor.Tests.csproj" />
+  </Folder>
+  <Folder Name="/tools/">
+    <Project Path="tools/CatalogGen/CatalogGen.csproj" />
+  </Folder>
+</Solution>

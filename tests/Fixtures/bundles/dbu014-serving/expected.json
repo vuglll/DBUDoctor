@@ -1,0 +1,85 @@
+{
+  "schemaVersion": 1,
+  "tool": {
+    "name": "dbudoctor",
+    "version": "0.0.0-test"
+  },
+  "exitCode": 0,
+  "policyViolated": false,
+  "bundles": [
+    {
+      "bundle": "ml",
+      "target": "dev",
+      "root": null,
+      "cloud": "azure",
+      "region": "westeurope",
+      "currency": "USD",
+      "catalogAsOf": "2026-11-01",
+      "cloudInfraIncluded": true,
+      "commitment": "payg",
+      "tier": "premium",
+      "scaling": "constant_runtime",
+      "autoscale": "max",
+      "defaultRunMinutes": null,
+      "calibration": null,
+      "hasCostRelevantChanges": true,
+      "totals": {
+        "monthlyDelta": 0,
+        "baseMonthly": 0,
+        "percentChange": null,
+        "includedChanges": 0,
+        "excludedChanges": 0
+      },
+      "changes": [],
+      "findings": [
+        {
+          "ruleId": "DBU014",
+          "severity": "warning",
+          "resourceType": "model_serving_endpoints",
+          "resourceKey": "churn",
+          "fieldPath": "config.served_entities[m].scale_to_zero_enabled",
+          "message": "serving endpoint `churn`, served entity `m` does not scale to zero in a development target: it keeps a floor of 4 provisioned concurrency running while idle. Set `scale_to_zero_enabled: true`.",
+          "docsUrl": "https://github.com/vuglll/DBUDoctor/blob/main/docs/rules/DBU014.md",
+          "existing": false,
+          "location": null
+        }
+      ],
+      "suppressedFindings": 0,
+      "existingFindingsHidden": 0,
+      "possibleRenames": [],
+      "notPriced": [
+        {
+          "type": "model_serving_endpoints",
+          "key": "batch_scoring",
+          "kind": "added"
+        },
+        {
+          "type": "model_serving_endpoints",
+          "key": "churn",
+          "kind": "modified"
+        }
+      ],
+      "assumptions": [
+        "Prices: Azure westeurope, Premium tier, pay-as-you-go VMs, catalog 2026-11-01.",
+        "Scaling: constant runtime. Autoscale: at max.",
+        "Run duration: not set, so scheduled classic jobs show rates only (set estimation.default_run_minutes)."
+      ],
+      "notModeled": [
+        "managed disks",
+        "blob storage",
+        "public IP addresses",
+        "network egress",
+        "NAT",
+        "storage",
+        "idle VMs in instance pools",
+        "VM time during cluster startup"
+      ],
+      "warnings": [],
+      "policy": {
+        "violated": false,
+        "violations": [],
+        "notes": []
+      }
+    }
+  ]
+}

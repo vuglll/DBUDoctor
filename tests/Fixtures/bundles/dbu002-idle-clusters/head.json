@@ -1,0 +1,48 @@
+{
+  "bundle": {
+    "name": "workspace_clusters",
+    "target": "prod",
+    "mode": "production"
+  },
+  "workspace": {
+    "host": "https://adb-1234567890123456.7.azuredatabricks.net"
+  },
+  "resources": {
+    "clusters": {
+      "shared": {
+        "cluster_name": "c",
+        "spark_version": "15.4.x-scala2.12",
+        "node_type_id": "Standard_DS3_v2",
+        "num_workers": 4,
+        "autotermination_minutes": 0
+      },
+      "legacy": {
+        "cluster_name": "c",
+        "spark_version": "15.4.x-scala2.12",
+        "node_type_id": "Standard_DS3_v2",
+        "num_workers": 2,
+        "autotermination_minutes": 0
+      },
+      "adhoc": {
+        "cluster_name": "c",
+        "spark_version": "15.4.x-scala2.12",
+        "node_type_id": "Standard_DS3_v2",
+        "num_workers": 1
+      },
+      "bi": {
+        "cluster_name": "c",
+        "spark_version": "15.4.x-scala2.12",
+        "node_type_id": "Standard_DS3_v2",
+        "num_workers": 4,
+        "autotermination_minutes": 240
+      },
+      "etl_dev": {
+        "cluster_name": "c",
+        "spark_version": "15.4.x-scala2.12",
+        "node_type_id": "Standard_DS3_v2",
+        "num_workers": 4,
+        "autotermination_minutes": 30
+      }
+    }
+  }
+}

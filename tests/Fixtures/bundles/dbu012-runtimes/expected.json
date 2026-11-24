@@ -1,0 +1,197 @@
+{
+  "schemaVersion": 1,
+  "tool": {
+    "name": "dbudoctor",
+    "version": "0.0.0-test"
+  },
+  "exitCode": 0,
+  "policyViolated": false,
+  "bundles": [
+    {
+      "bundle": "etl",
+      "target": "prod",
+      "root": null,
+      "cloud": "azure",
+      "region": "westeurope",
+      "currency": "USD",
+      "catalogAsOf": "2026-11-01",
+      "cloudInfraIncluded": true,
+      "commitment": "payg",
+      "tier": "premium",
+      "scaling": "constant_runtime",
+      "autoscale": "max",
+      "defaultRunMinutes": null,
+      "calibration": null,
+      "hasCostRelevantChanges": true,
+      "totals": {
+        "monthlyDelta": 0,
+        "baseMonthly": 0,
+        "percentChange": null,
+        "includedChanges": 0,
+        "excludedChanges": 3
+      },
+      "changes": [
+        {
+          "type": "jobs",
+          "key": "fresh",
+          "kind": "added",
+          "summary": "added, no schedule",
+          "category": "rate",
+          "confidence": "Unknown",
+          "inTotals": false,
+          "monthlyDelta": null,
+          "notes": [],
+          "before": null,
+          "after": {
+            "sku": "PREMIUM_JOBS_COMPUTE",
+            "pricePerDbu": 0.3,
+            "dbuPerHour": 2.25,
+            "dbuCostPerHour": 0.675,
+            "vmCostPerHour": 0.687,
+            "ratePerHour": 1.362,
+            "serverless": false,
+            "cloudInfraIncluded": true,
+            "runsPerMonth": null,
+            "frequency": "no schedule",
+            "monthly": null,
+            "monthlyCeiling": null,
+            "confidence": "Unknown",
+            "monthlyNote": "no schedule or trigger (runs on demand)",
+            "assumptions": [],
+            "unknownReasons": [],
+            "history": null
+          }
+        },
+        {
+          "type": "jobs",
+          "key": "nightly",
+          "kind": "modified",
+          "summary": "job_clusters[main].new_cluster.spark_version `16.4.x-scala2.12` → `13.3.x-scala2.12`",
+          "category": "rate",
+          "confidence": "Unknown",
+          "inTotals": false,
+          "monthlyDelta": null,
+          "notes": [],
+          "before": {
+            "sku": "PREMIUM_JOBS_COMPUTE",
+            "pricePerDbu": 0.3,
+            "dbuPerHour": 2.25,
+            "dbuCostPerHour": 0.675,
+            "vmCostPerHour": 0.687,
+            "ratePerHour": 1.362,
+            "serverless": false,
+            "cloudInfraIncluded": true,
+            "runsPerMonth": null,
+            "frequency": "no schedule",
+            "monthly": null,
+            "monthlyCeiling": null,
+            "confidence": "Unknown",
+            "monthlyNote": "no schedule or trigger (runs on demand)",
+            "assumptions": [],
+            "unknownReasons": [],
+            "history": null
+          },
+          "after": {
+            "sku": "PREMIUM_JOBS_COMPUTE",
+            "pricePerDbu": 0.3,
+            "dbuPerHour": 2.25,
+            "dbuCostPerHour": 0.675,
+            "vmCostPerHour": 0.687,
+            "ratePerHour": 1.362,
+            "serverless": false,
+            "cloudInfraIncluded": true,
+            "runsPerMonth": null,
+            "frequency": "no schedule",
+            "monthly": null,
+            "monthlyCeiling": null,
+            "confidence": "Unknown",
+            "monthlyNote": "no schedule or trigger (runs on demand)",
+            "assumptions": [],
+            "unknownReasons": [],
+            "history": null
+          }
+        },
+        {
+          "type": "jobs",
+          "key": "reports",
+          "kind": "added",
+          "summary": "added, no schedule",
+          "category": "rate",
+          "confidence": "Unknown",
+          "inTotals": false,
+          "monthlyDelta": null,
+          "notes": [],
+          "before": null,
+          "after": {
+            "sku": "PREMIUM_JOBS_COMPUTE",
+            "pricePerDbu": 0.3,
+            "dbuPerHour": 2.25,
+            "dbuCostPerHour": 0.675,
+            "vmCostPerHour": 0.687,
+            "ratePerHour": 1.362,
+            "serverless": false,
+            "cloudInfraIncluded": true,
+            "runsPerMonth": null,
+            "frequency": "no schedule",
+            "monthly": null,
+            "monthlyCeiling": null,
+            "confidence": "Unknown",
+            "monthlyNote": "no schedule or trigger (runs on demand)",
+            "assumptions": [],
+            "unknownReasons": [],
+            "history": null
+          }
+        }
+      ],
+      "findings": [
+        {
+          "ruleId": "DBU012",
+          "severity": "warning",
+          "resourceType": "jobs",
+          "resourceKey": "nightly",
+          "fieldPath": "job_clusters[main].new_cluster.spark_version",
+          "message": "job `nightly`, job cluster `main` uses Databricks Runtime 13.3 LTS, which reached end of support on 2026-08-22: it gets no more security fixes, and newer runtimes run the same work faster. Move to a current LTS release, such as 17.3 LTS, after testing.",
+          "docsUrl": "https://github.com/vuglll/DBUDoctor/blob/main/docs/rules/DBU012.md",
+          "existing": false,
+          "location": null
+        },
+        {
+          "ruleId": "DBU012",
+          "severity": "info",
+          "resourceType": "jobs",
+          "resourceKey": "reports",
+          "fieldPath": "job_clusters[main].new_cluster.spark_version",
+          "message": "job `reports`, job cluster `main` uses Databricks Runtime 14.3 LTS, which reaches end of support on 2027-02-01, in 84 days. Move to a current LTS release, such as 17.3 LTS, after testing.",
+          "docsUrl": "https://github.com/vuglll/DBUDoctor/blob/main/docs/rules/DBU012.md",
+          "existing": false,
+          "location": null
+        }
+      ],
+      "suppressedFindings": 0,
+      "existingFindingsHidden": 1,
+      "possibleRenames": [],
+      "notPriced": [],
+      "assumptions": [
+        "Prices: Azure westeurope, Premium tier, pay-as-you-go VMs, catalog 2026-11-01.",
+        "Scaling: constant runtime. Autoscale: at max.",
+        "Run duration: not set, so scheduled classic jobs show rates only (set estimation.default_run_minutes)."
+      ],
+      "notModeled": [
+        "managed disks",
+        "blob storage",
+        "public IP addresses",
+        "network egress",
+        "NAT",
+        "storage",
+        "idle VMs in instance pools",
+        "VM time during cluster startup"
+      ],
+      "warnings": [],
+      "policy": {
+        "violated": false,
+        "violations": [],
+        "notes": []
+      }
+    }
+  ]
+}

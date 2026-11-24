@@ -1,0 +1,5 @@
+# Test catalog (see prices/azure/westeurope.yaml).
+as_of: 2026-11-01
+source: test fixture
+sql_warehouse:
+  auto_stop_mins: 120

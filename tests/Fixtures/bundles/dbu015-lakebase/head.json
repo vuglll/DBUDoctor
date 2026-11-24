@@ -1,0 +1,26 @@
+{
+  "bundle": {
+    "name": "shop",
+    "target": "prod",
+    "mode": "production"
+  },
+  "workspace": {
+    "host": "https://adb-1234567890123456.7.azuredatabricks.net"
+  },
+  "resources": {
+    "postgres_endpoints": {
+      "prod_primary": {
+        "parent": "projects/shop/branches/production",
+        "autoscaling_limit_min_cu": 8,
+        "autoscaling_limit_max_cu": 16,
+        "no_suspension": true
+      },
+      "dev_primary": {
+        "parent": "projects/shop/branches/dev",
+        "autoscaling_limit_min_cu": 2,
+        "autoscaling_limit_max_cu": 4,
+        "no_suspension": true
+      }
+    }
+  }
+}

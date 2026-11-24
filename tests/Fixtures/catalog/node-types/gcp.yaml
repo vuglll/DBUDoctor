@@ -1,0 +1,8 @@
+# DBU per hour per GCP machine type. Empty until values are verified against the Databricks
+# GCP pricing calculator; classic GCP rates are Unknown until then.
+cloud: gcp
+as_of: 2026-11-08
+source: https://www.databricks.com/product/gcp-pricing/instance-types
+photon:
+  method: none
+node_types: {}

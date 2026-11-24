@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <RootNamespace>DBUDoctor.Core</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="YamlDotNet" />
+  </ItemGroup>
+  <ItemGroup Label="Catalog">
+    <!-- The catalog is embedded at build time. The logical name is the path under catalog/, with '/' separators. -->
+    <EmbeddedResource Include="../../catalog/**/*.yaml" LogicalName="catalog/%(RecursiveDir)%(Filename)%(Extension)" />
+  </ItemGroup>
+  <ItemGroup>
+    <InternalsVisibleTo Include="DBUDoctor.Tests" />
+  </ItemGroup>
+</Project>

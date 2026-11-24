@@ -1,0 +1,83 @@
+schema: spec-driven
+
+# The context is injected into every artifact's instructions, rules apply per
+# artifact, and operations guide /opsx:apply and /opsx:archive. Keep this to
+# constraints an agent cannot infer from the code.
+
+context: |
+  DBUDoctor is an open-source .NET CLI and GitHub Action that estimates what a
+  Databricks Declarative Automation Bundle change will cost and posts the
+  estimate on the pull request. Releases, reserved rule IDs and the per-rule
+  flow are in docs/roadmap.md, and rule drafts are in docs/rule-drafts.md.
+  Until add-pr-cost-diff is archived, its design.md (decisions D1-D15) is the
+  architecture reference. Where this repository hasn't settled a convention,
+  follow EFDoctor (github.com/vuglll/EFDoctor), the sister project.
+
+  Constraints:
+  - .NET 10, C#, Native AOT. No reflection-based serialization and no SDKs
+    that rely on it: System.Text.Json source generation, System.CommandLine 2
+    and plain HttpClient. AOT and trim warnings are errors.
+  - All money and DBU arithmetic uses decimal, never double or float. Round
+    only when formatting output; totals come from unrounded values.
+  - Input is `databricks bundle validate --output json` at the base and head
+    refs, not `bundle plan`, which compares against what is deployed instead
+    of the PR base.
+  - The rules and the cost engine are pure functions of the two resolved
+    documents plus config and catalog, so tests run offline. Network access
+    stays at the edges: --refresh-prices, calibration and GitHub comments.
+  - Prices, node-type DBU rates and warehouse sizes are catalog data in
+    catalog/, every entry with as_of and source, never constants in code.
+    Azure prices come from tools/CatalogGen (Azure Retail Prices API), not
+    hand edits.
+  - Azure is the reference cloud, with DBUs and VMs, Premium tier only. AWS
+    and GCP are DBU-only until a change adds their VM prices.
+  - Every monthly figure carries a confidence level (High, Medium, Low,
+    Unknown), and only calibration produces High. When frequency or duration
+    is unknown, show a rate per hour, not a guessed monthly figure. Costs that
+    aren't modeled are listed in the report, not ignored.
+  - Exit codes (0 ok, 1 policy violated, 2 invalid input or internal error)
+    and the --format json output are a public contract that the agent skill
+    and CI scripts depend on. Change them only additively, or in a change of
+    their own.
+  - Findings are new-only by default. Suppressions live in .dbudoctor.yml and
+    require a reason.
+  - Every rule declares metadata: title, when it fires, how to fix it and when
+    to suppress it. The metadata feeds the rule's docs page and generates the
+    agent skill in skills/dbudoctor/, which is never edited by hand.
+  - Conventional Commits. Work merges to dev, and a release is a merge commit
+    from dev to main.
+
+rules:
+  proposal:
+    - Name the docs/roadmap.md release the change targets and the capabilities it touches.
+    - A rule change adds exactly one rule. Name it add-dbu0xx-<slug>, start from its draft in docs/rule-drafts.md, and re-check the draft's fields and sources first, because drafts age.
+    - For a rule, check its "Needs first" column in docs/roadmap.md and say how that prerequisite is met.
+    - Pricing and platform facts cite a source URL and the date they were checked.
+    - Say what the change leaves unmodeled or out of scope.
+  specs:
+    - Requirement statements use SHALL or MUST and stay under 500 characters, because strict validation fails above that. Split a long requirement rather than dropping detail.
+    - Every requirement has at least one scenario in WHEN/THEN form.
+    - Cost scenarios use concrete numbers that a test can assert, with the arithmetic shown. Count the driver as a node, so with one node type, going from 4 to 8 workers is 5 to 9 nodes, 1.8 times the cost and not double.
+    - Title a rule requirement "DBU0xx <short title>". Cover when it fires (with the cost it reports), when it doesn't, and any difference between clouds. New-only behavior and suppressions belong to the engine requirements, so don't repeat them per rule.
+  design:
+    - Write design.md only when the change adds a cost formula, a catalog file or field, a new input or external call, or touches the JSON output or exit codes. A typical rule change doesn't need one.
+    - Every new pricing assumption states its confidence level and its source.
+    - Any new dependency must work under Native AOT, and the design says how that was checked.
+  tasks:
+    - For a rule change, follow "How a rule ships" in docs/roadmap.md, which covers the rule and its metadata, a fixture bundle, positive, negative and new-only tests, docs/rules/DBU0xx.md, and the regenerated agent skill.
+    - Each task is small enough to finish and verify on its own, and names the tests that prove it.
+    - Price changes go through tools/CatalogGen, not hand edits to catalog/prices/azure/.
+    - End with a verification task, which is a clean build with AOT and trim warnings as errors, all tests green, golden outputs reviewed, and openspec validate <id> --strict passing.
+
+operations:
+  apply:
+    guidance:
+      - 'Branch from dev and use Conventional Commits; a rule lands as feat(rules): add DBU0xx, <title>.'
+      - Tick a task only after dotnet build has zero warnings and dotnet test passes. After adding a dependency or a new serialized type, also run a Native AOT publish for your platform.
+      - Update golden files only when the output change is intended, and say why in the commit message. Never update them just to make a failing test pass.
+      - If the code shows a spec is wrong, fix the change's spec delta first and re-run strict validation, then implement to it.
+      - Never hand-edit generated files (skills/dbudoctor/ and catalog/prices/azure/). Change the generator or its input and regenerate.
+  archive:
+    guidance:
+      - Archive only after the implementation is merged to dev and every task is ticked. Archive add-pr-cost-diff after release 0.2 and before add-usage-calibration, which adds requirements to its specs.
+      - After archiving, run openspec validate --all --strict.

@@ -1,0 +1,62 @@
+{
+  "bundle": {
+    "name": "streaming",
+    "target": "prod",
+    "mode": "production"
+  },
+  "workspace": {
+    "host": "https://adb-1234567890123456.7.azuredatabricks.net"
+  },
+  "resources": {
+    "jobs": {
+      "events_ingest": {
+        "name": "j",
+        "job_clusters": [
+          {
+            "job_cluster_key": "main",
+            "new_cluster": {
+              "spark_version": "15.4.x-scala2.12",
+              "node_type_id": "Standard_DS3_v2",
+              "num_workers": 4
+            }
+          }
+        ],
+        "tasks": [
+          {
+            "task_key": "t",
+            "job_cluster_key": "main",
+            "notebook_task": {
+              "notebook_path": "/x"
+            }
+          }
+        ],
+        "continuous": {}
+      },
+      "backfill": {
+        "name": "j",
+        "job_clusters": [
+          {
+            "job_cluster_key": "main",
+            "new_cluster": {
+              "spark_version": "15.4.x-scala2.12",
+              "node_type_id": "Standard_DS3_v2",
+              "num_workers": 4
+            }
+          }
+        ],
+        "tasks": [
+          {
+            "task_key": "t",
+            "job_cluster_key": "main",
+            "notebook_task": {
+              "notebook_path": "/x"
+            }
+          }
+        ],
+        "continuous": {
+          "pause_status": "PAUSED"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "bundle": {
+    "name": "ml",
+    "target": "dev",
+    "mode": "development"
+  },
+  "workspace": {
+    "host": "https://adb-1234567890123456.7.azuredatabricks.net"
+  },
+  "resources": {
+    "model_serving_endpoints": {
+      "churn": {
+        "name": "e",
+        "config": {
+          "served_entities": [
+            {
+              "name": "m",
+              "entity_name": "main.ml.churn",
+              "entity_version": "3",
+              "workload_size": "Small",
+              "scale_to_zero_enabled": false
+            }
+          ]
+        }
+      },
+      "batch_scoring": {
+        "name": "e",
+        "config": {
+          "served_entities": [
+            {
+              "name": "m",
+              "entity_name": "main.ml.churn",
+              "entity_version": "3",
+              "workload_size": "Small",
+              "scale_to_zero_enabled": true
+            }
+          ]
+        }
+      }
+    }
+  }
+}

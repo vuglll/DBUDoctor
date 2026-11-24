@@ -1,0 +1,60 @@
+name: Refresh the catalog
+
+# Weekly: regenerate the price catalog (Azure from the public Azure Retail Prices API; AWS and GCP
+# DBUs from the Databricks pricing calculator data; AWS VMs from the AWS Price List, a few GB streamed) and open a pull request with the price changes, so a
+# human reviews every one before it ships.
+on:
+  schedule:
+    - cron: "17 5 * * 1" # Mondays 05:17 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+env:
+  DOTNET_CLI_TELEMETRY_OPTOUT: "1"
+  DOTNET_NOLOGO: "1"
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: dev
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Generate
+        run: dotnet run --project tools/CatalogGen --configuration Release -- --catalog catalog --summary "$RUNNER_TEMP/summary.md"
+
+      - name: Test the new catalog
+        run: dotnet test DBUDoctor.slnx --configuration Release
+
+      - name: Open a pull request
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if git diff --quiet -- catalog/; then
+            echo "No price changes."
+            exit 0
+          fi
+          branch="chore/catalog-$(date -u +%Y-%m-%d)"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git switch -c "$branch"
+          git add catalog/
+          git commit -m "chore(catalog): refresh prices $(date -u +%Y-%m-%d)"
+          git push --force -u origin "$branch"
+          existing_pr="$(gh pr list --base dev --head "$branch" --state open --json number --jq '.[0].number // empty')"
+          if [ -n "$existing_pr" ]; then
+            echo "Pull request #$existing_pr already exists."
+            exit 0
+          fi
+          gh pr create --base dev --head "$branch" \
+            --title "chore(catalog): refresh prices $(date -u +%Y-%m-%d)" \
+            --body-file "$RUNNER_TEMP/summary.md"

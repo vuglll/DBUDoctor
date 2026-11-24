@@ -1,0 +1,10 @@
+# Test catalog (see prices/azure/westeurope.yaml).
+cloud: azure
+as_of: 2026-11-01
+source: test fixture
+photon:
+  method: dbu_count
+node_types:
+  Standard_DS3_v2: { dbu: 0.75, photon_dbu_jobs: 1.88, photon_dbu_all_purpose: 1.5 }
+  Standard_DS4_v2: { dbu: 1.5, photon_dbu_jobs: 3.75, photon_dbu_all_purpose: 3 }
+  Standard_E8ds_v4: { dbu: 2, photon_dbu_jobs: 5, photon_dbu_all_purpose: 4 }

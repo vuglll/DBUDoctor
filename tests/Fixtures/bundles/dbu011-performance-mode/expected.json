@@ -1,0 +1,161 @@
+{
+  "schemaVersion": 1,
+  "tool": {
+    "name": "dbudoctor",
+    "version": "0.0.0-test"
+  },
+  "exitCode": 0,
+  "policyViolated": false,
+  "bundles": [
+    {
+      "bundle": "reports",
+      "target": "prod",
+      "root": null,
+      "cloud": "azure",
+      "region": "westeurope",
+      "currency": "USD",
+      "catalogAsOf": "2026-11-01",
+      "cloudInfraIncluded": true,
+      "commitment": "payg",
+      "tier": "premium",
+      "scaling": "constant_runtime",
+      "autoscale": "max",
+      "defaultRunMinutes": null,
+      "calibration": null,
+      "hasCostRelevantChanges": true,
+      "totals": {
+        "monthlyDelta": 0,
+        "baseMonthly": 0,
+        "percentChange": null,
+        "includedChanges": 0,
+        "excludedChanges": 2
+      },
+      "changes": [
+        {
+          "type": "jobs",
+          "key": "nightly",
+          "kind": "modified",
+          "summary": "performance_target `STANDARD` → unset",
+          "category": "needs_history",
+          "confidence": "Unknown",
+          "inTotals": false,
+          "monthlyDelta": null,
+          "notes": [],
+          "before": {
+            "sku": "PREMIUM_JOBS_SERVERLESS_COMPUTE",
+            "pricePerDbu": 0.47,
+            "dbuPerHour": null,
+            "dbuCostPerHour": null,
+            "vmCostPerHour": null,
+            "ratePerHour": null,
+            "serverless": true,
+            "cloudInfraIncluded": false,
+            "runsPerMonth": 30.416666666666666666666666667,
+            "frequency": "daily",
+            "monthly": null,
+            "monthlyCeiling": null,
+            "confidence": "Unknown",
+            "monthlyNote": "needs history",
+            "assumptions": [
+              "serverless job: DBUs per run cannot be derived from configuration"
+            ],
+            "unknownReasons": [],
+            "history": null
+          },
+          "after": {
+            "sku": "PREMIUM_JOBS_SERVERLESS_COMPUTE",
+            "pricePerDbu": 0.47,
+            "dbuPerHour": null,
+            "dbuCostPerHour": null,
+            "vmCostPerHour": null,
+            "ratePerHour": null,
+            "serverless": true,
+            "cloudInfraIncluded": false,
+            "runsPerMonth": 30.416666666666666666666666667,
+            "frequency": "daily",
+            "monthly": null,
+            "monthlyCeiling": null,
+            "confidence": "Unknown",
+            "monthlyNote": "needs history",
+            "assumptions": [
+              "serverless job: DBUs per run cannot be derived from configuration"
+            ],
+            "unknownReasons": [],
+            "history": null
+          }
+        },
+        {
+          "type": "jobs",
+          "key": "weekly",
+          "kind": "added",
+          "summary": "added, daily, serverless",
+          "category": "needs_history",
+          "confidence": "Unknown",
+          "inTotals": false,
+          "monthlyDelta": null,
+          "notes": [],
+          "before": null,
+          "after": {
+            "sku": "PREMIUM_JOBS_SERVERLESS_COMPUTE",
+            "pricePerDbu": 0.47,
+            "dbuPerHour": null,
+            "dbuCostPerHour": null,
+            "vmCostPerHour": null,
+            "ratePerHour": null,
+            "serverless": true,
+            "cloudInfraIncluded": false,
+            "runsPerMonth": 30.416666666666666666666666667,
+            "frequency": "daily",
+            "monthly": null,
+            "monthlyCeiling": null,
+            "confidence": "Unknown",
+            "monthlyNote": "needs history",
+            "assumptions": [
+              "serverless job: DBUs per run cannot be derived from configuration"
+            ],
+            "unknownReasons": [],
+            "history": null
+          }
+        }
+      ],
+      "findings": [
+        {
+          "ruleId": "DBU011",
+          "severity": "info",
+          "resourceType": "jobs",
+          "resourceKey": "nightly",
+          "fieldPath": "performance_target",
+          "message": "job `nightly` runs serverless tasks daily in performance-optimized mode (the default). Standard mode uses the same SKU but consumes fewer DBUs, and starts in 4 to 6 minutes; for scheduled batch work, set `performance_target: STANDARD`.",
+          "docsUrl": "https://github.com/vuglll/DBUDoctor/blob/main/docs/rules/DBU011.md",
+          "existing": false,
+          "location": null
+        }
+      ],
+      "suppressedFindings": 0,
+      "existingFindingsHidden": 0,
+      "possibleRenames": [],
+      "notPriced": [],
+      "assumptions": [
+        "Prices: Azure westeurope, Premium tier, pay-as-you-go VMs, catalog 2026-11-01.",
+        "Scaling: constant runtime. Autoscale: at max.",
+        "Run duration: not set, so scheduled classic jobs show rates only (set estimation.default_run_minutes)."
+      ],
+      "notModeled": [
+        "managed disks",
+        "blob storage",
+        "public IP addresses",
+        "network egress",
+        "NAT",
+        "storage",
+        "idle VMs in instance pools",
+        "VM time during cluster startup"
+      ],
+      "warnings": [],
+      "policy": {
+        "violated": false,
+        "violations": [],
+        "notes": []
+      }
+    }
+  ]
+}

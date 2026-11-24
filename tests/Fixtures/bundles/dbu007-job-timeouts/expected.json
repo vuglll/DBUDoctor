@@ -1,0 +1,166 @@
+{
+  "schemaVersion": 1,
+  "tool": {
+    "name": "dbudoctor",
+    "version": "0.0.0-test"
+  },
+  "exitCode": 0,
+  "policyViolated": false,
+  "bundles": [
+    {
+      "bundle": "etl",
+      "target": "prod",
+      "root": null,
+      "cloud": "azure",
+      "region": "westeurope",
+      "currency": "USD",
+      "catalogAsOf": "2026-11-01",
+      "cloudInfraIncluded": true,
+      "commitment": "payg",
+      "tier": "premium",
+      "scaling": "constant_runtime",
+      "autoscale": "max",
+      "defaultRunMinutes": null,
+      "calibration": null,
+      "hasCostRelevantChanges": true,
+      "totals": {
+        "monthlyDelta": 0,
+        "baseMonthly": 0,
+        "percentChange": null,
+        "includedChanges": 0,
+        "excludedChanges": 2
+      },
+      "changes": [
+        {
+          "type": "jobs",
+          "key": "backfill",
+          "kind": "added",
+          "summary": "added, daily",
+          "category": "rate",
+          "confidence": "Unknown",
+          "inTotals": false,
+          "monthlyDelta": null,
+          "notes": [],
+          "before": null,
+          "after": {
+            "sku": "PREMIUM_JOBS_COMPUTE",
+            "pricePerDbu": 0.3,
+            "dbuPerHour": 3.75,
+            "dbuCostPerHour": 1.125,
+            "vmCostPerHour": 1.145,
+            "ratePerHour": 2.27,
+            "serverless": false,
+            "cloudInfraIncluded": true,
+            "runsPerMonth": 30.416666666666666666666666667,
+            "frequency": "daily",
+            "monthly": null,
+            "monthlyCeiling": null,
+            "confidence": "Unknown",
+            "monthlyNote": "run duration unknown: set `estimation.default_run_minutes`",
+            "assumptions": [],
+            "unknownReasons": [],
+            "history": null
+          }
+        },
+        {
+          "type": "jobs",
+          "key": "nightly_etl",
+          "kind": "modified",
+          "summary": "timeout_seconds `7200` → unset",
+          "category": "rate",
+          "confidence": "Unknown",
+          "inTotals": false,
+          "monthlyDelta": null,
+          "notes": [],
+          "before": {
+            "sku": "PREMIUM_JOBS_COMPUTE",
+            "pricePerDbu": 0.3,
+            "dbuPerHour": 3.75,
+            "dbuCostPerHour": 1.125,
+            "vmCostPerHour": 1.145,
+            "ratePerHour": 2.27,
+            "serverless": false,
+            "cloudInfraIncluded": true,
+            "runsPerMonth": 30.416666666666666666666666667,
+            "frequency": "daily",
+            "monthly": null,
+            "monthlyCeiling": null,
+            "confidence": "Unknown",
+            "monthlyNote": "run duration unknown: set `estimation.default_run_minutes`",
+            "assumptions": [],
+            "unknownReasons": [],
+            "history": null
+          },
+          "after": {
+            "sku": "PREMIUM_JOBS_COMPUTE",
+            "pricePerDbu": 0.3,
+            "dbuPerHour": 3.75,
+            "dbuCostPerHour": 1.125,
+            "vmCostPerHour": 1.145,
+            "ratePerHour": 2.27,
+            "serverless": false,
+            "cloudInfraIncluded": true,
+            "runsPerMonth": 30.416666666666666666666666667,
+            "frequency": "daily",
+            "monthly": null,
+            "monthlyCeiling": null,
+            "confidence": "Unknown",
+            "monthlyNote": "run duration unknown: set `estimation.default_run_minutes`",
+            "assumptions": [],
+            "unknownReasons": [],
+            "history": null
+          }
+        }
+      ],
+      "findings": [
+        {
+          "ruleId": "DBU007",
+          "severity": "info",
+          "resourceType": "jobs",
+          "resourceKey": "backfill",
+          "fieldPath": "timeout_seconds",
+          "message": "job `backfill` has no timeout: the job sets none, nor does task `transform`, and a stuck run keeps billing $2.27 per hour until someone cancels it.",
+          "docsUrl": "https://github.com/vuglll/DBUDoctor/blob/main/docs/rules/DBU007.md",
+          "existing": false,
+          "location": null
+        },
+        {
+          "ruleId": "DBU007",
+          "severity": "info",
+          "resourceType": "jobs",
+          "resourceKey": "nightly_etl",
+          "fieldPath": "timeout_seconds",
+          "message": "job `nightly_etl` has no timeout: neither the job nor its tasks set one, and a stuck run keeps billing $2.27 per hour until someone cancels it.",
+          "docsUrl": "https://github.com/vuglll/DBUDoctor/blob/main/docs/rules/DBU007.md",
+          "existing": false,
+          "location": null
+        }
+      ],
+      "suppressedFindings": 0,
+      "existingFindingsHidden": 0,
+      "possibleRenames": [],
+      "notPriced": [],
+      "assumptions": [
+        "Prices: Azure westeurope, Premium tier, pay-as-you-go VMs, catalog 2026-11-01.",
+        "Scaling: constant runtime. Autoscale: at max.",
+        "Run duration: not set, so scheduled classic jobs show rates only (set estimation.default_run_minutes)."
+      ],
+      "notModeled": [
+        "managed disks",
+        "blob storage",
+        "public IP addresses",
+        "network egress",
+        "NAT",
+        "storage",
+        "idle VMs in instance pools",
+        "VM time during cluster startup"
+      ],
+      "warnings": [],
+      "policy": {
+        "violated": false,
+        "violations": [],
+        "notes": []
+      }
+    }
+  ]
+}

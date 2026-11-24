@@ -1,0 +1,42 @@
+# SQL warehouse DBU per hour per cluster, by cluster size. The same counts apply to classic, pro
+# and serverless warehouses; the SKU sets the $/DBU.
+# 5X-Large (Beta) is not listed: neither pricing page publishes its DBU count yet.
+as_of: 2026-11-08
+source: https://learn.microsoft.com/en-us/azure/databricks/resources/pricing
+sizes:
+  2X-Small: 4
+  X-Small: 6
+  Small: 12
+  Medium: 24
+  Large: 40
+  X-Large: 80
+  2X-Large: 144
+  3X-Large: 272
+  4X-Large: 528
+# The VMs behind one cluster of a classic or pro warehouse. Serverless warehouses include their VMs
+# in the DBU price and never use this table.
+vm_layout:
+  azure:
+    2X-Small: { driver: Standard_E8ds_v4, worker: Standard_E8ds_v4, workers: 1 }
+    X-Small: { driver: Standard_E8ds_v4, worker: Standard_E8ds_v4, workers: 2 }
+    Small: { driver: Standard_E16ds_v4, worker: Standard_E8ds_v4, workers: 4 }
+    Medium: { driver: Standard_E32ds_v4, worker: Standard_E8ds_v4, workers: 8 }
+    Large: { driver: Standard_E32ds_v4, worker: Standard_E8ds_v4, workers: 16 }
+    X-Large: { driver: Standard_E64ds_v4, worker: Standard_E8ds_v4, workers: 32 }
+    2X-Large: { driver: Standard_E64ds_v4, worker: Standard_E8ds_v4, workers: 64 }
+    3X-Large: { driver: Standard_E64ds_v4, worker: Standard_E8ds_v4, workers: 128 }
+    4X-Large: { driver: Standard_E64ds_v4, worker: Standard_E8ds_v4, workers: 256 }
+    5X-Large: { driver: Standard_E64ds_v4, worker: Standard_E8ds_v4, workers: 512 }
+  aws:
+    2X-Small: { driver: i3.2xlarge, worker: i3.2xlarge, workers: 1 }
+    X-Small: { driver: i3.2xlarge, worker: i3.2xlarge, workers: 2 }
+    Small: { driver: i3.4xlarge, worker: i3.2xlarge, workers: 4 }
+    Medium: { driver: i3.8xlarge, worker: i3.2xlarge, workers: 8 }
+    Large: { driver: i3.8xlarge, worker: i3.2xlarge, workers: 16 }
+    X-Large: { driver: i3.16xlarge, worker: i3.2xlarge, workers: 32 }
+    2X-Large: { driver: i3.16xlarge, worker: i3.2xlarge, workers: 64 }
+    3X-Large: { driver: i3.16xlarge, worker: i3.2xlarge, workers: 128 }
+    4X-Large: { driver: i3.16xlarge, worker: i3.2xlarge, workers: 256 }
+    5X-Large: { driver: i3.16xlarge, worker: i3.2xlarge, workers: 512 }
+# vm_layout sources: https://learn.microsoft.com/en-us/azure/databricks/compute/sql-warehouse/warehouse-behavior
+# and https://docs.databricks.com/aws/en/compute/sql-warehouse/warehouse-behavior (checked 2026-11-10).

@@ -1,0 +1,16 @@
+# Serverless products priced by size. Databricks Apps: DBU per hour per instance by compute size,
+# billed at the Interactive (all-purpose) Serverless price while the app runs.
+as_of: 2026-11-09
+source: https://docs.databricks.com/aws/en/dev-tools/databricks-apps/compute-size
+apps:
+  default_size: MEDIUM
+  sizes:
+    MEDIUM: 0.5
+    LARGE: 1
+    XLARGE: 3
+lakebase:
+  # DBU per compute unit (CU) per hour of the Database Serverless SKU, by cloud. GCP's calculator
+  # data lists Lakebase per DBU without a CU rate, so GCP endpoints are Unknown.
+  dbu_per_cu:
+    aws: { value: 0.230, source: "https://www.databricks.com/en-pricing-assets/data/pricing/AWS.json (Lakebase, Database Capacity Unit)" }
+    azure: { value: 0.213, source: "https://learn.microsoft.com/en-us/azure/databricks/resources/pricing" }

@@ -1,0 +1,16 @@
+# AWS us-east-1, Premium tier, list $/DBU. DBU-only: AWS VM prices are not in the catalog yet.
+# Seed values from the design (checked October 2026). Not yet re-verified against the pricing page,
+# which renders its prices client-side.
+cloud: aws
+region: us-east-1
+currency: USD
+as_of: 2026-10-15
+source: https://www.databricks.com/product/pricing (seed, unverified)
+dbu:
+  PREMIUM_JOBS_COMPUTE: 0.15
+  PREMIUM_JOBS_SERVERLESS_COMPUTE: 0.35
+  PREMIUM_ALL_PURPOSE_COMPUTE: 0.55
+  PREMIUM_ALL_PURPOSE_SERVERLESS_COMPUTE: 0.75
+  PREMIUM_SQL_COMPUTE: 0.22
+  PREMIUM_SQL_PRO_COMPUTE: 0.55
+  PREMIUM_SERVERLESS_SQL_COMPUTE: 0.70

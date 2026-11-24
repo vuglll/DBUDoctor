@@ -1,0 +1,196 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/vuglll/DBUDoctor/blob/main/schemas/report.schema.json",
+  "title": "dbudoctor diff --format json",
+  "description": "Public contract. Fields are only added; a breaking change needs a new schemaVersion.",
+  "type": "object",
+  "required": ["schemaVersion", "tool", "exitCode", "policyViolated", "bundles"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "tool": {
+      "type": "object",
+      "required": ["name", "version"],
+      "properties": { "name": { "const": "dbudoctor" }, "version": { "type": "string" } }
+    },
+    "exitCode": { "enum": [0, 1] },
+    "policyViolated": { "type": "boolean" },
+    "bundles": { "type": "array", "items": { "$ref": "#/$defs/bundle" } }
+  },
+  "$defs": {
+    "money": { "type": ["number", "null"] },
+    "confidence": { "enum": ["High", "Medium", "Low", "Unknown"] },
+    "strings": { "type": "array", "items": { "type": "string" } },
+    "bundle": {
+      "type": "object",
+      "required": [
+        "bundle", "target", "root", "cloud", "region", "currency", "catalogAsOf", "cloudInfraIncluded", "commitment",
+        "scaling", "autoscale", "defaultRunMinutes", "hasCostRelevantChanges", "totals", "changes", "findings",
+        "suppressedFindings", "existingFindingsHidden", "possibleRenames", "notPriced", "assumptions", "notModeled",
+        "warnings", "policy"
+      ],
+      "properties": {
+        "bundle": { "type": "string" },
+        "target": { "type": "string" },
+        "root": { "type": ["string", "null"] },
+        "cloud": { "enum": ["azure", "aws", "gcp", null] },
+        "region": { "type": ["string", "null"] },
+        "currency": { "type": "string" },
+        "catalogAsOf": { "type": ["string", "null"], "format": "date" },
+        "cloudInfraIncluded": { "type": "boolean" },
+        "commitment": { "enum": ["payg", "spot", "reserved_1y", "reserved_3y", "savings_plan_1y", "savings_plan_3y"] },
+        "tier": { "enum": ["premium", "enterprise"], "description": "Added after 0.2: the plan tier of the list prices." },
+        "scaling": { "enum": ["constant_runtime", "linear_speedup"] },
+        "autoscale": { "enum": ["max", "mid", "min"] },
+        "defaultRunMinutes": { "type": ["number", "null"] },
+        "calibration": {
+          "description": "Added in 0.3: null unless calibration is on.",
+          "oneOf": [
+            { "type": "null" },
+            {
+              "type": "object",
+              "required": ["target", "windowDays", "calibratedChanges", "notFound", "livePrices", "notes"],
+              "properties": {
+                "target": { "type": ["string", "null"] },
+                "windowDays": { "type": "integer" },
+                "calibratedChanges": { "type": "integer" },
+                "notFound": { "type": "integer" },
+                "livePrices": { "type": "boolean" },
+                "notes": { "$ref": "#/$defs/strings" }
+              }
+            }
+          ]
+        },
+        "hasCostRelevantChanges": { "type": "boolean" },
+        "totals": {
+          "type": "object",
+          "required": ["monthlyDelta", "baseMonthly", "percentChange", "includedChanges", "excludedChanges"],
+          "properties": {
+            "monthlyDelta": { "type": "number" },
+            "baseMonthly": { "type": "number" },
+            "percentChange": { "type": ["number", "null"] },
+            "includedChanges": { "type": "integer" },
+            "excludedChanges": { "type": "integer" }
+          }
+        },
+        "changes": { "type": "array", "items": { "$ref": "#/$defs/change" } },
+        "findings": { "type": "array", "items": { "$ref": "#/$defs/finding" } },
+        "suppressedFindings": { "type": "integer" },
+        "existingFindingsHidden": { "type": "integer" },
+        "possibleRenames": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["type", "from", "to"],
+            "properties": { "type": { "type": "string" }, "from": { "type": "string" }, "to": { "type": "string" } }
+          }
+        },
+        "notPriced": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["type", "key", "kind"],
+            "properties": { "type": { "type": "string" }, "key": { "type": "string" }, "kind": { "enum": ["added", "removed", "modified"] } }
+          }
+        },
+        "assumptions": { "$ref": "#/$defs/strings" },
+        "notModeled": { "$ref": "#/$defs/strings" },
+        "warnings": { "$ref": "#/$defs/strings" },
+        "policy": {
+          "type": "object",
+          "required": ["violated", "violations", "notes"],
+          "properties": {
+            "violated": { "type": "boolean" },
+            "violations": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["policy", "message"],
+                "properties": { "policy": { "type": "string" }, "message": { "type": "string" } }
+              }
+            },
+            "notes": { "$ref": "#/$defs/strings" }
+          }
+        }
+      }
+    },
+    "change": {
+      "type": "object",
+      "required": ["type", "key", "kind", "summary", "category", "confidence", "inTotals", "monthlyDelta", "notes", "before", "after"],
+      "properties": {
+        "type": { "enum": ["clusters", "jobs", "pipelines", "sql_warehouses"] },
+        "key": { "type": "string" },
+        "kind": { "enum": ["added", "removed", "modified"] },
+        "summary": { "type": "string" },
+        "category": { "enum": ["monthly", "rate", "needs_history", "unknown"] },
+        "confidence": { "$ref": "#/$defs/confidence" },
+        "inTotals": { "type": "boolean" },
+        "monthlyDelta": { "$ref": "#/$defs/money" },
+        "notes": { "$ref": "#/$defs/strings" },
+        "before": { "oneOf": [{ "type": "null" }, { "$ref": "#/$defs/estimate" }] },
+        "after": { "oneOf": [{ "type": "null" }, { "$ref": "#/$defs/estimate" }] }
+      }
+    },
+    "estimate": {
+      "type": "object",
+      "required": [
+        "sku", "pricePerDbu", "dbuPerHour", "dbuCostPerHour", "vmCostPerHour", "ratePerHour", "serverless",
+        "cloudInfraIncluded", "runsPerMonth", "frequency", "monthly", "confidence", "monthlyNote", "assumptions", "unknownReasons"
+      ],
+      "properties": {
+        "sku": { "type": ["string", "null"] },
+        "pricePerDbu": { "$ref": "#/$defs/money" },
+        "dbuPerHour": { "type": ["number", "null"] },
+        "dbuCostPerHour": { "$ref": "#/$defs/money" },
+        "vmCostPerHour": { "$ref": "#/$defs/money" },
+        "ratePerHour": { "$ref": "#/$defs/money" },
+        "serverless": { "type": "boolean" },
+        "cloudInfraIncluded": { "type": "boolean" },
+        "runsPerMonth": { "type": ["number", "null"] },
+        "frequency": { "type": ["string", "null"] },
+        "monthly": { "$ref": "#/$defs/money" },
+        "monthlyCeiling": { "$ref": "#/$defs/money", "description": "Added in 0.8: the most a month can cost at the maximum size (Lakebase); null otherwise." },
+        "confidence": { "$ref": "#/$defs/confidence" },
+        "monthlyNote": { "type": ["string", "null"] },
+        "assumptions": { "$ref": "#/$defs/strings" },
+        "unknownReasons": { "$ref": "#/$defs/strings" },
+        "history": {
+          "description": "Added in 0.3: observed usage behind a calibrated figure; null otherwise.",
+          "oneOf": [
+            { "type": "null" },
+            {
+              "type": "object",
+              "required": ["runs", "days", "windowDays", "dbusPerRun", "monthlyDbus"],
+              "properties": {
+                "runs": { "type": "integer" },
+                "days": { "type": "integer" },
+                "windowDays": { "type": "integer" },
+                "dbusPerRun": { "type": ["number", "null"] },
+                "monthlyDbus": { "type": "number" }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "finding": {
+      "type": "object",
+      "required": ["ruleId", "severity", "resourceType", "resourceKey", "fieldPath", "message", "docsUrl", "existing", "location"],
+      "properties": {
+        "ruleId": { "type": "string", "pattern": "^DBU[0-9]{3}$" },
+        "severity": { "enum": ["info", "warning", "error"] },
+        "resourceType": { "type": "string" },
+        "resourceKey": { "type": "string" },
+        "fieldPath": { "type": "string" },
+        "message": { "type": "string" },
+        "docsUrl": { "type": "string" },
+        "existing": { "type": "boolean" },
+        "location": {
+          "oneOf": [
+            { "type": "null" },
+            { "type": "object", "required": ["file", "line"], "properties": { "file": { "type": "string" }, "line": { "type": "integer" } } }
+          ]
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,295 @@
+{
+  "schemaVersion": 1,
+  "tool": {
+    "name": "dbudoctor",
+    "version": "0.0.0-test"
+  },
+  "exitCode": 1,
+  "policyViolated": true,
+  "bundles": [
+    {
+      "bundle": "analytics",
+      "target": "prod",
+      "root": null,
+      "cloud": "azure",
+      "region": "westeurope",
+      "currency": "USD",
+      "catalogAsOf": "2026-11-01",
+      "cloudInfraIncluded": true,
+      "commitment": "payg",
+      "tier": "premium",
+      "scaling": "constant_runtime",
+      "autoscale": "max",
+      "defaultRunMinutes": 20,
+      "calibration": null,
+      "hasCostRelevantChanges": true,
+      "totals": {
+        "monthlyDelta": 2651.3600000000000000000000001,
+        "baseMonthly": 552.36666666666666666666666669,
+        "percentChange": 480,
+        "includedChanges": 2,
+        "excludedChanges": 2
+      },
+      "changes": [
+        {
+          "type": "jobs",
+          "key": "orders_sync",
+          "kind": "modified",
+          "summary": "schedule hourly → every 15 min",
+          "category": "monthly",
+          "confidence": "Medium",
+          "inTotals": true,
+          "monthlyDelta": 1657.1000000000000000000000001,
+          "notes": [],
+          "before": {
+            "sku": "PREMIUM_JOBS_COMPUTE",
+            "pricePerDbu": 0.3,
+            "dbuPerHour": 3.75,
+            "dbuCostPerHour": 1.125,
+            "vmCostPerHour": 1.145,
+            "ratePerHour": 2.27,
+            "serverless": false,
+            "cloudInfraIncluded": true,
+            "runsPerMonth": 730,
+            "frequency": "hourly",
+            "monthly": 552.36666666666666666666666669,
+            "monthlyCeiling": null,
+            "confidence": "Medium",
+            "monthlyNote": null,
+            "assumptions": [
+              "20-minute runs (configured)"
+            ],
+            "unknownReasons": [],
+            "history": null
+          },
+          "after": {
+            "sku": "PREMIUM_JOBS_COMPUTE",
+            "pricePerDbu": 0.3,
+            "dbuPerHour": 3.75,
+            "dbuCostPerHour": 1.125,
+            "vmCostPerHour": 1.145,
+            "ratePerHour": 2.27,
+            "serverless": false,
+            "cloudInfraIncluded": true,
+            "runsPerMonth": 2920,
+            "frequency": "every 15 min",
+            "monthly": 2209.4666666666666666666666668,
+            "monthlyCeiling": null,
+            "confidence": "Medium",
+            "monthlyNote": null,
+            "assumptions": [
+              "20-minute runs (configured)"
+            ],
+            "unknownReasons": [],
+            "history": null
+          }
+        },
+        {
+          "type": "jobs",
+          "key": "report_refresh",
+          "kind": "modified",
+          "summary": "tasks[refresh].existing_cluster_id unset → `0601-182128-dcbte59m`; tasks[refresh].job_cluster_key `main` → unset; +3 more",
+          "category": "rate",
+          "confidence": "Unknown",
+          "inTotals": false,
+          "monthlyDelta": null,
+          "notes": [],
+          "before": {
+            "sku": "PREMIUM_JOBS_COMPUTE",
+            "pricePerDbu": 0.3,
+            "dbuPerHour": 2.25,
+            "dbuCostPerHour": 0.675,
+            "vmCostPerHour": 0.687,
+            "ratePerHour": 1.362,
+            "serverless": false,
+            "cloudInfraIncluded": true,
+            "runsPerMonth": 30.416666666666666666666666667,
+            "frequency": "daily",
+            "monthly": 13.809166666666666666666666667,
+            "monthlyCeiling": null,
+            "confidence": "Medium",
+            "monthlyNote": null,
+            "assumptions": [
+              "20-minute runs (configured)"
+            ],
+            "unknownReasons": [],
+            "history": null
+          },
+          "after": {
+            "sku": "PREMIUM_ALL_PURPOSE_COMPUTE",
+            "pricePerDbu": 0.55,
+            "dbuPerHour": null,
+            "dbuCostPerHour": null,
+            "vmCostPerHour": null,
+            "ratePerHour": null,
+            "serverless": false,
+            "cloudInfraIncluded": false,
+            "runsPerMonth": 30.416666666666666666666666667,
+            "frequency": "daily",
+            "monthly": null,
+            "monthlyCeiling": null,
+            "confidence": "Unknown",
+            "monthlyNote": "runs on an all-purpose cluster: its cost depends on that cluster's usage",
+            "assumptions": [
+              "tasks on existing all-purpose clusters (refresh) are priced with those clusters"
+            ],
+            "unknownReasons": [],
+            "history": null
+          }
+        },
+        {
+          "type": "pipelines",
+          "key": "events",
+          "kind": "added",
+          "summary": "added, continuous",
+          "category": "monthly",
+          "confidence": "Medium",
+          "inTotals": true,
+          "monthlyDelta": 994.26,
+          "notes": [],
+          "before": null,
+          "after": {
+            "sku": "PREMIUM_DLT_CORE_COMPUTE",
+            "pricePerDbu": 0.3,
+            "dbuPerHour": 2.25,
+            "dbuCostPerHour": 0.675,
+            "vmCostPerHour": 0.687,
+            "ratePerHour": 1.362,
+            "serverless": false,
+            "cloudInfraIncluded": true,
+            "runsPerMonth": null,
+            "frequency": null,
+            "monthly": 994.26,
+            "monthlyCeiling": null,
+            "confidence": "Medium",
+            "monthlyNote": null,
+            "assumptions": [
+              "autoscale at max: pipeline cluster priced with 2 workers (1–2)",
+              "continuous: runs all month (730 h)"
+            ],
+            "unknownReasons": [],
+            "history": null
+          }
+        },
+        {
+          "type": "sql_warehouses",
+          "key": "bi_wh",
+          "kind": "modified",
+          "summary": "cluster_size `Small` → `Medium`",
+          "category": "rate",
+          "confidence": "Unknown",
+          "inTotals": false,
+          "monthlyDelta": null,
+          "notes": [],
+          "before": {
+            "sku": "PREMIUM_SERVERLESS_SQL_COMPUTE",
+            "pricePerDbu": 0.7,
+            "dbuPerHour": 12,
+            "dbuCostPerHour": 8.4,
+            "vmCostPerHour": null,
+            "ratePerHour": 8.4,
+            "serverless": true,
+            "cloudInfraIncluded": false,
+            "runsPerMonth": null,
+            "frequency": null,
+            "monthly": null,
+            "monthlyCeiling": null,
+            "confidence": "Unknown",
+            "monthlyNote": "SQL warehouse: needs history",
+            "assumptions": [
+              "1 cluster running (min_num_clusters); scales up to 2"
+            ],
+            "unknownReasons": [],
+            "history": null
+          },
+          "after": {
+            "sku": "PREMIUM_SERVERLESS_SQL_COMPUTE",
+            "pricePerDbu": 0.7,
+            "dbuPerHour": 24,
+            "dbuCostPerHour": 16.8,
+            "vmCostPerHour": null,
+            "ratePerHour": 16.8,
+            "serverless": true,
+            "cloudInfraIncluded": false,
+            "runsPerMonth": null,
+            "frequency": null,
+            "monthly": null,
+            "monthlyCeiling": null,
+            "confidence": "Unknown",
+            "monthlyNote": "SQL warehouse: needs history",
+            "assumptions": [
+              "1 cluster running (min_num_clusters); scales up to 2"
+            ],
+            "unknownReasons": [],
+            "history": null
+          }
+        }
+      ],
+      "findings": [
+        {
+          "ruleId": "DBU001",
+          "severity": "warning",
+          "resourceType": "jobs",
+          "resourceKey": "report_refresh",
+          "fieldPath": "tasks[refresh].existing_cluster_id",
+          "message": "job `report_refresh`, task `refresh` runs on all-purpose cluster `0601-182128-…`. Jobs compute costs about 55% of the all-purpose DBU rate here.",
+          "docsUrl": "https://github.com/vuglll/DBUDoctor/blob/main/docs/rules/DBU001.md",
+          "existing": false,
+          "location": null
+        },
+        {
+          "ruleId": "DBU004",
+          "severity": "warning",
+          "resourceType": "pipelines",
+          "resourceKey": "events",
+          "fieldPath": "continuous",
+          "message": "pipeline `events` is continuous: it runs around the clock (~730 h / month).",
+          "docsUrl": "https://github.com/vuglll/DBUDoctor/blob/main/docs/rules/DBU004.md",
+          "existing": false,
+          "location": null
+        },
+        {
+          "ruleId": "DBU010",
+          "severity": "warning",
+          "resourceType": "jobs",
+          "resourceKey": "orders_sync",
+          "fieldPath": "schedule.quartz_cron_expression",
+          "message": "job `orders_sync` runs 4.0× as often (730 → 2,920 runs / month). Cron `0 0 * * * ?` → `0 0/15 * * * ?`.",
+          "docsUrl": "https://github.com/vuglll/DBUDoctor/blob/main/docs/rules/DBU010.md",
+          "existing": false,
+          "location": null
+        }
+      ],
+      "suppressedFindings": 0,
+      "existingFindingsHidden": 2,
+      "possibleRenames": [],
+      "notPriced": [],
+      "assumptions": [
+        "Prices: Azure westeurope, Premium tier, pay-as-you-go VMs, catalog 2026-11-01.",
+        "Scaling: constant runtime. Autoscale: at max.",
+        "Run duration: 20 minutes (estimation.default_run_minutes)."
+      ],
+      "notModeled": [
+        "managed disks",
+        "blob storage",
+        "public IP addresses",
+        "network egress",
+        "NAT",
+        "storage",
+        "idle VMs in instance pools",
+        "VM time during cluster startup"
+      ],
+      "warnings": [],
+      "policy": {
+        "violated": true,
+        "violations": [
+          {
+            "policy": "fail_on.monthly_increase",
+            "message": "monthly increase +$2,651 is above the limit of $500."
+          }
+        ],
+        "notes": []
+      }
+    }
+  ]
+}

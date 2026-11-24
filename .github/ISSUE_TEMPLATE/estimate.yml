@@ -1,0 +1,38 @@
+name: Wrong price or estimate
+description: A rate, monthly figure or catalog price looks wrong.
+labels: [estimate]
+body:
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: Output of `dbudoctor --version` (the report also prints the catalog date).
+    validations:
+      required: true
+  - type: dropdown
+    id: cloud
+    attributes:
+      label: Cloud
+      options: [Azure, AWS, GCP]
+    validations:
+      required: true
+  - type: input
+    id: region
+    attributes:
+      label: Region and plan
+      description: For example `westeurope`, Premium; or `us-east-1`, Enterprise.
+  - type: textarea
+    id: resource
+    attributes:
+      label: Resource
+      description: The resource's configuration (node type, workers, size, schedule…). Remove hosts and IDs.
+      render: yaml
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: DBUDoctor's figure, and the figure you expected
+      description: Include where the expected figure comes from (pricing page, invoice, `system.billing.usage`).
+    validations:
+      required: true

@@ -1,0 +1,15 @@
+# Cost categories that reports list as not modeled (design D13).
+as_of: 2026-11-08
+source: https://azure.microsoft.com/en-us/pricing/details/databricks/
+azure:
+  - managed disks
+  - blob storage
+  - public IP addresses
+  - network egress
+  - NAT
+all:
+  - storage
+not_visible:
+  - idle VMs in instance pools
+  - VM time during cluster startup
+without_vm_prices: cloud VMs for classic compute

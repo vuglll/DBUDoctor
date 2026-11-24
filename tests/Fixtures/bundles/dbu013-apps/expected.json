@@ -1,0 +1,162 @@
+{
+  "schemaVersion": 1,
+  "tool": {
+    "name": "dbudoctor",
+    "version": "0.0.0-test"
+  },
+  "exitCode": 0,
+  "policyViolated": false,
+  "bundles": [
+    {
+      "bundle": "portal",
+      "target": "prod",
+      "root": null,
+      "cloud": "azure",
+      "region": "westeurope",
+      "currency": "USD",
+      "catalogAsOf": "2026-11-01",
+      "cloudInfraIncluded": true,
+      "commitment": "payg",
+      "tier": "premium",
+      "scaling": "constant_runtime",
+      "autoscale": "max",
+      "defaultRunMinutes": null,
+      "calibration": null,
+      "hasCostRelevantChanges": true,
+      "totals": {
+        "monthlyDelta": 2190,
+        "baseMonthly": 365,
+        "percentChange": 600,
+        "includedChanges": 2,
+        "excludedChanges": 0
+      },
+      "changes": [
+        {
+          "type": "apps",
+          "key": "admin",
+          "kind": "added",
+          "summary": "added, always on, serverless",
+          "category": "monthly",
+          "confidence": "Medium",
+          "inTotals": true,
+          "monthlyDelta": 365,
+          "notes": [],
+          "before": null,
+          "after": {
+            "sku": "PREMIUM_ALL_PURPOSE_SERVERLESS_COMPUTE",
+            "pricePerDbu": 1,
+            "dbuPerHour": 0.5,
+            "dbuCostPerHour": 0.5,
+            "vmCostPerHour": null,
+            "ratePerHour": 0.5,
+            "serverless": true,
+            "cloudInfraIncluded": false,
+            "runsPerMonth": null,
+            "frequency": "always on",
+            "monthly": 365,
+            "monthlyCeiling": null,
+            "confidence": "Medium",
+            "monthlyNote": null,
+            "assumptions": [
+              "compute size not set: priced as MEDIUM (the default)",
+              "running all month (730 h): an app bills for its size while it runs"
+            ],
+            "unknownReasons": [],
+            "history": null
+          }
+        },
+        {
+          "type": "apps",
+          "key": "portal",
+          "kind": "modified",
+          "summary": "compute_size `MEDIUM` → `XLARGE`",
+          "category": "monthly",
+          "confidence": "Medium",
+          "inTotals": true,
+          "monthlyDelta": 1825,
+          "notes": [],
+          "before": {
+            "sku": "PREMIUM_ALL_PURPOSE_SERVERLESS_COMPUTE",
+            "pricePerDbu": 1,
+            "dbuPerHour": 0.5,
+            "dbuCostPerHour": 0.5,
+            "vmCostPerHour": null,
+            "ratePerHour": 0.5,
+            "serverless": true,
+            "cloudInfraIncluded": false,
+            "runsPerMonth": null,
+            "frequency": "always on",
+            "monthly": 365,
+            "monthlyCeiling": null,
+            "confidence": "Medium",
+            "monthlyNote": null,
+            "assumptions": [
+              "running all month (730 h): an app bills for its size while it runs"
+            ],
+            "unknownReasons": [],
+            "history": null
+          },
+          "after": {
+            "sku": "PREMIUM_ALL_PURPOSE_SERVERLESS_COMPUTE",
+            "pricePerDbu": 1,
+            "dbuPerHour": 3,
+            "dbuCostPerHour": 3,
+            "vmCostPerHour": null,
+            "ratePerHour": 3,
+            "serverless": true,
+            "cloudInfraIncluded": false,
+            "runsPerMonth": null,
+            "frequency": "always on",
+            "monthly": 2190,
+            "monthlyCeiling": null,
+            "confidence": "Medium",
+            "monthlyNote": null,
+            "assumptions": [
+              "running all month (730 h): an app bills for its size while it runs"
+            ],
+            "unknownReasons": [],
+            "history": null
+          }
+        }
+      ],
+      "findings": [
+        {
+          "ruleId": "DBU013",
+          "severity": "info",
+          "resourceType": "apps",
+          "resourceKey": "portal",
+          "fieldPath": "compute_size",
+          "message": "app `portal` runs on XLARGE compute: 3 DBU per hour per instance, 6.0× MEDIUM, about $2,190 a month while it runs.",
+          "docsUrl": "https://github.com/vuglll/DBUDoctor/blob/main/docs/rules/DBU013.md",
+          "existing": false,
+          "location": null
+        }
+      ],
+      "suppressedFindings": 0,
+      "existingFindingsHidden": 0,
+      "possibleRenames": [],
+      "notPriced": [],
+      "assumptions": [
+        "Prices: Azure westeurope, Premium tier, pay-as-you-go VMs, catalog 2026-11-01.",
+        "Scaling: constant runtime. Autoscale: at max.",
+        "Run duration: not set, so scheduled classic jobs show rates only (set estimation.default_run_minutes)."
+      ],
+      "notModeled": [
+        "managed disks",
+        "blob storage",
+        "public IP addresses",
+        "network egress",
+        "NAT",
+        "storage",
+        "idle VMs in instance pools",
+        "VM time during cluster startup"
+      ],
+      "warnings": [],
+      "policy": {
+        "violated": false,
+        "violations": [],
+        "notes": []
+      }
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+name: Rule idea or false positive
+description: Propose a new cost rule, or report a finding that should not fire.
+labels: [rule]
+body:
+  - type: dropdown
+    id: kind
+    attributes:
+      label: Kind
+      options: [New rule, False positive, False negative, Wording or fix suggestion]
+    validations:
+      required: true
+  - type: input
+    id: rule
+    attributes:
+      label: Rule ID
+      description: For example DBU007, if it is about an existing rule.
+  - type: textarea
+    id: pattern
+    attributes:
+      label: The configuration pattern
+      description: What in the bundle wastes money (or was flagged wrongly), with a small example.
+      render: yaml
+    validations:
+      required: true
+  - type: textarea
+    id: why
+    attributes:
+      label: Why it costs money, and the fix
+      description: Link a Databricks doc or pricing page where you can.

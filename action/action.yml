@@ -1,0 +1,105 @@
+name: DBUDoctor
+description: Estimate what a Databricks bundle change will cost, and keep one sticky pull request comment up to date.
+author: Nemanja Markovic
+branding:
+  icon: dollar-sign
+  color: orange
+
+inputs:
+  version:
+    description: DBUDoctor version to run, such as 0.3.0. Default is the latest release.
+    required: false
+    default: latest
+  target:
+    description: Bundle target. Default is the first target with mode production.
+    required: false
+    default: ""
+  config:
+    description: Path to the configuration file. Default is .dbudoctor.yml in the repository root.
+    required: false
+    default: ""
+  comment:
+    description: Create or update the sticky pull request comment (needs pull-requests write).
+    required: false
+    default: "true"
+  args:
+    description: Extra arguments for dbudoctor diff, such as --report-existing or --refresh-prices.
+    required: false
+    default: ""
+  github-token:
+    description: Token for the pull request comment.
+    required: false
+    default: ${{ github.token }}
+
+outputs:
+  exit-code:
+    description: 0 when no policy is violated, 1 when a fail_on policy is violated.
+    value: ${{ steps.run.outputs.exit-code }}
+  report:
+    description: Path to the JSON report.
+    value: ${{ steps.run.outputs.report }}
+
+runs:
+  using: composite
+  steps:
+    - name: Download DBUDoctor
+      id: download
+      shell: bash
+      env:
+        VERSION: ${{ inputs.version }}
+        GH_TOKEN: ${{ inputs.github-token }}
+        REPO: vuglll/DBUDoctor
+      run: |
+        set -euo pipefail
+        case "${RUNNER_OS}/${RUNNER_ARCH}" in
+          Linux/X64) rid=linux-x64; archive=tar.gz ;;
+          Linux/ARM64) rid=linux-arm64; archive=tar.gz ;;
+          macOS/ARM64) rid=osx-arm64; archive=tar.gz ;;
+          Windows/X64) rid=win-x64; archive=zip ;;
+          *) echo "::error::DBUDoctor has no binary for ${RUNNER_OS}/${RUNNER_ARCH}. Use the dotnet tool: dotnet tool install --global DBUDoctor"; exit 2 ;;
+        esac
+        if [ "$VERSION" = "latest" ]; then
+          tag="$(curl -fsSL -H "Authorization: Bearer $GH_TOKEN" "https://api.github.com/repos/$REPO/releases/latest" | sed -n 's/.*"tag_name": *"\([^"]*\)".*/\1/p')"
+        else
+          tag="v${VERSION#v}"
+        fi
+        dir="${RUNNER_TEMP}/dbudoctor-${tag}"
+        mkdir -p "$dir"
+        cd "$dir"
+        file="dbudoctor-${rid}.${archive}"
+        curl -fsSLO "https://github.com/$REPO/releases/download/${tag}/${file}"
+        curl -fsSLO "https://github.com/$REPO/releases/download/${tag}/SHA256SUMS"
+        # Verify the checksum before running anything.
+        expected="$(grep " ${file}\$" SHA256SUMS | cut -d' ' -f1)"
+        if command -v sha256sum >/dev/null; then actual="$(sha256sum "$file" | cut -d' ' -f1)"; else actual="$(shasum -a 256 "$file" | cut -d' ' -f1)"; fi
+        if [ -z "$expected" ] || [ "$expected" != "$actual" ]; then
+          echo "::error::Checksum mismatch for $file (expected '$expected', got '$actual')."
+          exit 2
+        fi
+        if [ "$archive" = "zip" ]; then unzip -q "$file"; else tar -xzf "$file"; fi
+        echo "$dir" >> "$GITHUB_PATH"
+        echo "Using DBUDoctor ${tag} (${rid})."
+
+    - name: Run DBUDoctor
+      id: run
+      shell: bash
+      env:
+        DBUDOCTOR_GITHUB_TOKEN: ${{ inputs.github-token }}
+        TARGET: ${{ inputs.target }}
+        CONFIG: ${{ inputs.config }}
+        COMMENT: ${{ inputs.comment }}
+        ARGS: ${{ inputs.args }}
+      run: |
+        set -uo pipefail
+        report="${RUNNER_TEMP}/dbudoctor-report.json"
+        flags=(diff --format json --output "$report")
+        [ -n "$TARGET" ] && flags+=(--target "$TARGET")
+        [ -n "$CONFIG" ] && flags+=(--config "$CONFIG")
+        [ "$COMMENT" = "true" ] && flags+=(--github-comment)
+        # shellcheck disable=SC2206
+        [ -n "$ARGS" ] && flags+=($ARGS)
+        dbudoctor "${flags[@]}"
+        code=$?
+        echo "exit-code=$code" >> "$GITHUB_OUTPUT"
+        echo "report=$report" >> "$GITHUB_OUTPUT"
+        exit $code

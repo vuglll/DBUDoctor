@@ -1,0 +1,11 @@
+<Project>
+  <!-- Older 10.0 SDKs select an ILCompiler with a published high-severity advisory
+       (GHSA-p3jp-9v83-76w9, fixed in 10.0.14). Raise the pack to 10.0.14 only when the SDK picks
+       something older: newer SDKs must keep their own pack, because ILCompiler has to match the
+       runtime pack version. -->
+  <ItemGroup>
+    <KnownILCompilerPack Update="Microsoft.DotNet.ILCompiler">
+      <ILCompilerPackVersion Condition="$([MSBuild]::VersionLessThan('%(ILCompilerPackVersion)', '10.0.14'))">10.0.14</ILCompilerPackVersion>
+    </KnownILCompilerPack>
+  </ItemGroup>
+</Project>

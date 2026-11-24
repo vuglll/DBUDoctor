@@ -1,0 +1,11 @@
+# Test catalog: invented AWS values (not real prices), so AWS classic paths can be tested.
+cloud: aws
+as_of: 2026-11-01
+source: test fixture
+photon:
+  method: multiplier
+  multipliers:
+    m5: 2.0
+node_types:
+  m5.xlarge: { dbu: 0.69, family: m5 }
+  m5.2xlarge: { dbu: 1.37, family: m5 }

@@ -1,0 +1,270 @@
+# DBU per hour per Azure VM type, from the "DBU Count" column of the Azure Databricks pricing page
+# (Premium tier). Photon DBU counts come from the "with Photon" workload tables on the same page:
+# enabling Photon raises the DBU count, and the Photon SKU has its own $/DBU in prices/azure/*.yaml.
+# Maintained by hand and by pull request; there is no API for these values (design D7).
+cloud: azure
+as_of: 2026-11-08
+source: https://azure.microsoft.com/en-us/pricing/details/databricks/
+photon:
+  method: dbu_count
+node_types:
+  Standard_D12_v2: { dbu: 1, photon_dbu_jobs: 2.5, photon_dbu_all_purpose: 2 }
+  Standard_D13_v2: { dbu: 2, photon_dbu_jobs: 5, photon_dbu_all_purpose: 4 }
+  Standard_D14_v2: { dbu: 4, photon_dbu_jobs: 10, photon_dbu_all_purpose: 8 }
+  Standard_D15_v2: { dbu: 5, photon_dbu_jobs: 12.5, photon_dbu_all_purpose: 10 }
+  Standard_D16_v3: { dbu: 3, photon_dbu_jobs: 7.5, photon_dbu_all_purpose: 6 }
+  Standard_D16a_v4: { dbu: 3, photon_dbu_jobs: 7.5, photon_dbu_all_purpose: 6 }
+  Standard_D16ads_v5: { dbu: 4, photon_dbu_jobs: 10, photon_dbu_all_purpose: 8 }
+  Standard_D16as_v4: { dbu: 3, photon_dbu_jobs: 7.5, photon_dbu_all_purpose: 6 }
+  Standard_D16as_v5: { dbu: 4, photon_dbu_jobs: 10, photon_dbu_all_purpose: 8 }
+  Standard_D16d_v4: { dbu: 3, photon_dbu_jobs: 7.5, photon_dbu_all_purpose: 6 }
+  Standard_D16ds_v4: { dbu: 3, photon_dbu_jobs: 7.5, photon_dbu_all_purpose: 6 }
+  Standard_D16ds_v5: { dbu: 4, photon_dbu_jobs: 10, photon_dbu_all_purpose: 8 }
+  Standard_D16pds_v6: { dbu: 4.12, photon_dbu_jobs: 10.3, photon_dbu_all_purpose: 8.24 }
+  Standard_D16ps_v6: { dbu: 4.12 }
+  Standard_D16s_v3: { dbu: 3, photon_dbu_jobs: 7.5, photon_dbu_all_purpose: 6 }
+  Standard_D16s_v5: { dbu: 4, photon_dbu_jobs: 10, photon_dbu_all_purpose: 8 }
+  Standard_D32_v3: { dbu: 6, photon_dbu_jobs: 15, photon_dbu_all_purpose: 12 }
+  Standard_D32a_v4: { dbu: 6, photon_dbu_jobs: 15, photon_dbu_all_purpose: 12 }
+  Standard_D32ads_v5: { dbu: 8, photon_dbu_jobs: 20, photon_dbu_all_purpose: 16 }
+  Standard_D32as_v4: { dbu: 6, photon_dbu_jobs: 15, photon_dbu_all_purpose: 12 }
+  Standard_D32as_v5: { dbu: 8, photon_dbu_jobs: 20, photon_dbu_all_purpose: 16 }
+  Standard_D32d_v4: { dbu: 6, photon_dbu_jobs: 15, photon_dbu_all_purpose: 12 }
+  Standard_D32ds_v4: { dbu: 6, photon_dbu_jobs: 15, photon_dbu_all_purpose: 12 }
+  Standard_D32ds_v5: { dbu: 8, photon_dbu_jobs: 20, photon_dbu_all_purpose: 16 }
+  Standard_D32pds_v6: { dbu: 8.24, photon_dbu_jobs: 20.6, photon_dbu_all_purpose: 16.48 }
+  Standard_D32ps_v6: { dbu: 8.24 }
+  Standard_D32s_v3: { dbu: 6, photon_dbu_jobs: 15, photon_dbu_all_purpose: 12 }
+  Standard_D32s_v5: { dbu: 8, photon_dbu_jobs: 20, photon_dbu_all_purpose: 16 }
+  Standard_D3_v2: { dbu: 0.75, photon_dbu_jobs: 1.88, photon_dbu_all_purpose: 1.5 }
+  Standard_D48a_v4: { dbu: 9, photon_dbu_jobs: 22.5, photon_dbu_all_purpose: 18 }
+  Standard_D48ads_v5: { dbu: 12, photon_dbu_jobs: 30, photon_dbu_all_purpose: 24 }
+  Standard_D48as_v4: { dbu: 9, photon_dbu_jobs: 22.5, photon_dbu_all_purpose: 18 }
+  Standard_D48as_v5: { dbu: 12, photon_dbu_jobs: 30, photon_dbu_all_purpose: 24 }
+  Standard_D48d_v4: { dbu: 9, photon_dbu_jobs: 22.5, photon_dbu_all_purpose: 18 }
+  Standard_D48ds_v4: { dbu: 9, photon_dbu_jobs: 22.5, photon_dbu_all_purpose: 18 }
+  Standard_D48ds_v5: { dbu: 12, photon_dbu_jobs: 30, photon_dbu_all_purpose: 24 }
+  Standard_D48pds_v6: { dbu: 12.36, photon_dbu_jobs: 30.9, photon_dbu_all_purpose: 24.72 }
+  Standard_D48ps_v6: { dbu: 12.36 }
+  Standard_D48s_v5: { dbu: 12, photon_dbu_jobs: 30, photon_dbu_all_purpose: 24 }
+  Standard_D4_v2: { dbu: 1.5, photon_dbu_jobs: 3.75, photon_dbu_all_purpose: 3 }
+  Standard_D4a_v4: { dbu: 0.75, photon_dbu_jobs: 1.88, photon_dbu_all_purpose: 1.5 }
+  Standard_D4ads_v5: { dbu: 1, photon_dbu_jobs: 2.5, photon_dbu_all_purpose: 2 }
+  Standard_D4as_v5: { dbu: 1, photon_dbu_jobs: 2.5, photon_dbu_all_purpose: 2 }
+  Standard_D4d_v4: { dbu: 0.75, photon_dbu_jobs: 1.88, photon_dbu_all_purpose: 1.5 }
+  Standard_D4ds_v4: { dbu: 0.75, photon_dbu_jobs: 1.88, photon_dbu_all_purpose: 1.5 }
+  Standard_D4ds_v5: { dbu: 1, photon_dbu_jobs: 2.5, photon_dbu_all_purpose: 2 }
+  Standard_D4pds_v6: { dbu: 1.03, photon_dbu_jobs: 2.58, photon_dbu_all_purpose: 2.06 }
+  Standard_D4ps_v6: { dbu: 1.03 }
+  Standard_D4s_v3: { dbu: 0.75, photon_dbu_jobs: 1.88, photon_dbu_all_purpose: 1.5 }
+  Standard_D4s_v5: { dbu: 1, photon_dbu_jobs: 2.5, photon_dbu_all_purpose: 2 }
+  Standard_D5_v2: { dbu: 3, photon_dbu_jobs: 7.5, photon_dbu_all_purpose: 6 }
+  Standard_D64_v3: { dbu: 12, photon_dbu_jobs: 30, photon_dbu_all_purpose: 24 }
+  Standard_D64a_v4: { dbu: 12, photon_dbu_jobs: 30, photon_dbu_all_purpose: 24 }
+  Standard_D64ads_v5: { dbu: 16, photon_dbu_jobs: 40, photon_dbu_all_purpose: 32 }
+  Standard_D64as_v4: { dbu: 12, photon_dbu_jobs: 30, photon_dbu_all_purpose: 24 }
+  Standard_D64as_v5: { dbu: 16, photon_dbu_jobs: 40, photon_dbu_all_purpose: 32 }
+  Standard_D64d_v4: { dbu: 12, photon_dbu_jobs: 30, photon_dbu_all_purpose: 24 }
+  Standard_D64ds_v4: { dbu: 12, photon_dbu_jobs: 30, photon_dbu_all_purpose: 24 }
+  Standard_D64ds_v5: { dbu: 16, photon_dbu_jobs: 40, photon_dbu_all_purpose: 32 }
+  Standard_D64pds_v6: { dbu: 16.47, photon_dbu_jobs: 41.18, photon_dbu_all_purpose: 32.94 }
+  Standard_D64ps_v6: { dbu: 16.47 }
+  Standard_D64s_v3: { dbu: 12, photon_dbu_jobs: 30, photon_dbu_all_purpose: 24 }
+  Standard_D64s_v5: { dbu: 16, photon_dbu_jobs: 40, photon_dbu_all_purpose: 32 }
+  Standard_D8_v3: { dbu: 1.5, photon_dbu_jobs: 3.75, photon_dbu_all_purpose: 3 }
+  Standard_D8a_v4: { dbu: 1.5, photon_dbu_jobs: 3.75, photon_dbu_all_purpose: 3 }
+  Standard_D8ads_v5: { dbu: 2, photon_dbu_jobs: 5, photon_dbu_all_purpose: 4 }
+  Standard_D8as_v4: { dbu: 1.5, photon_dbu_jobs: 3.75, photon_dbu_all_purpose: 3 }
+  Standard_D8as_v5: { dbu: 2, photon_dbu_jobs: 5, photon_dbu_all_purpose: 4 }
+  Standard_D8d_v4: { dbu: 1.5, photon_dbu_jobs: 3.75, photon_dbu_all_purpose: 3 }
+  Standard_D8ds_v4: { dbu: 1.5, photon_dbu_jobs: 3.75, photon_dbu_all_purpose: 3 }
+  Standard_D8ds_v5: { dbu: 2, photon_dbu_jobs: 5, photon_dbu_all_purpose: 4 }
+  Standard_D8pds_v6: { dbu: 2.06, photon_dbu_jobs: 5.15, photon_dbu_all_purpose: 4.12 }
+  Standard_D8ps_v6: { dbu: 2.06 }
+  Standard_D8s_v3: { dbu: 1.5, photon_dbu_jobs: 3.75, photon_dbu_all_purpose: 3 }
+  Standard_D8s_v5: { dbu: 2, photon_dbu_jobs: 5, photon_dbu_all_purpose: 4 }
+  Standard_D96a_v4: { dbu: 18, photon_dbu_jobs: 45, photon_dbu_all_purpose: 36 }
+  Standard_D96ads_v5: { dbu: 24, photon_dbu_jobs: 60, photon_dbu_all_purpose: 48 }
+  Standard_D96as_v4: { dbu: 18, photon_dbu_jobs: 45, photon_dbu_all_purpose: 36 }
+  Standard_D96as_v5: { dbu: 24, photon_dbu_jobs: 60, photon_dbu_all_purpose: 48 }
+  Standard_D96ds_v5: { dbu: 24, photon_dbu_jobs: 60, photon_dbu_all_purpose: 48 }
+  Standard_D96pds_v6: { dbu: 24.71, photon_dbu_jobs: 61.78, photon_dbu_all_purpose: 49.42 }
+  Standard_D96ps_v6: { dbu: 28.08, dbu_all_purpose: 24.71 }
+  Standard_D96s_v5: { dbu: 24, photon_dbu_jobs: 60, photon_dbu_all_purpose: 48 }
+  Standard_DC16ads_v6: { dbu: 5.1, photon_dbu_jobs: 10.2, photon_dbu_all_purpose: 10.2 }
+  Standard_DC16as_v5: { dbu: 4, photon_dbu_jobs: 10, photon_dbu_all_purpose: 8 }
+  Standard_DC2ads_v6: { dbu: 0.64, photon_dbu_jobs: 1.28, photon_dbu_all_purpose: 1.28 }
+  Standard_DC32ads_v6: { dbu: 10.2, photon_dbu_jobs: 20.4, photon_dbu_all_purpose: 20.4 }
+  Standard_DC32as_v5: { dbu: 8, photon_dbu_jobs: 20, photon_dbu_all_purpose: 16 }
+  Standard_DC48ads_v6: { dbu: 15.3, photon_dbu_jobs: 30.6, photon_dbu_all_purpose: 30.6 }
+  Standard_DC4ads_v6: { dbu: 1.28, photon_dbu_jobs: 2.56, photon_dbu_all_purpose: 2.56 }
+  Standard_DC4as_v5: { dbu: 1, photon_dbu_jobs: 2.5, photon_dbu_all_purpose: 2 }
+  Standard_DC64ads_v6: { dbu: 20.4, photon_dbu_jobs: 40.8, photon_dbu_all_purpose: 40.8 }
+  Standard_DC8ads_v6: { dbu: 2.55, photon_dbu_jobs: 5.1, photon_dbu_all_purpose: 5.1 }
+  Standard_DC8as_v5: { dbu: 2, photon_dbu_jobs: 5, photon_dbu_all_purpose: 4 }
+  Standard_DC96ads_v6: { dbu: 30.6, photon_dbu_jobs: 61.2, photon_dbu_all_purpose: 61.2 }
+  Standard_DS12_v2: { dbu: 1, photon_dbu_jobs: 2.5, photon_dbu_all_purpose: 2 }
+  Standard_DS13_v2: { dbu: 2, photon_dbu_jobs: 5, photon_dbu_all_purpose: 4 }
+  Standard_DS14_v2: { dbu: 4, photon_dbu_jobs: 10, photon_dbu_all_purpose: 8 }
+  Standard_DS15_v2: { dbu: 5, photon_dbu_jobs: 12.5, photon_dbu_all_purpose: 10 }
+  Standard_DS3_v2: { dbu: 0.75, photon_dbu_jobs: 1.88, photon_dbu_all_purpose: 1.5 }
+  Standard_DS4_v2: { dbu: 1.5, photon_dbu_jobs: 3.75, photon_dbu_all_purpose: 3 }
+  Standard_DS5_v2: { dbu: 3, photon_dbu_jobs: 7.5, photon_dbu_all_purpose: 6 }
+  Standard_E128ds_v6: { dbu: 49.28, photon_dbu_jobs: 123.2, photon_dbu_all_purpose: 98.56 }
+  Standard_E16_v3: { dbu: 4 }
+  Standard_E16a_v4: { dbu: 4, photon_dbu_jobs: 10, photon_dbu_all_purpose: 8 }
+  Standard_E16ads_v5: { dbu: 5.5, photon_dbu_jobs: 13.75, photon_dbu_all_purpose: 11 }
+  Standard_E16ads_v7: { dbu: 8.22, photon_dbu_jobs: 16.44, photon_dbu_all_purpose: 16.44 }
+  Standard_E16as_v4: { dbu: 4 }
+  Standard_E16as_v5: { dbu: 5.5, photon_dbu_jobs: 13.75, photon_dbu_all_purpose: 11 }
+  Standard_E16d_v4: { dbu: 4, photon_dbu_jobs: 10, photon_dbu_all_purpose: 8 }
+  Standard_E16ds_v4: { dbu: 4, photon_dbu_jobs: 10, photon_dbu_all_purpose: 8 }
+  Standard_E16ds_v5: { dbu: 5.5, photon_dbu_jobs: 13.75, photon_dbu_all_purpose: 11 }
+  Standard_E16ds_v6: { dbu: 6.16, photon_dbu_jobs: 15.4, photon_dbu_all_purpose: 12.32 }
+  Standard_E16pds_v6: { dbu: 5.67, photon_dbu_jobs: 14.18, photon_dbu_all_purpose: 11.34 }
+  Standard_E16ps_v6: { dbu: 5.67 }
+  Standard_E16s_v3: { dbu: 4 }
+  Standard_E16s_v4: { dbu: 4, photon_dbu_jobs: 10, photon_dbu_all_purpose: 8 }
+  Standard_E16s_v5: { dbu: 5.5, photon_dbu_jobs: 13.75, photon_dbu_all_purpose: 11 }
+  Standard_E20a_v4: { dbu: 5, photon_dbu_jobs: 12.5, photon_dbu_all_purpose: 10 }
+  Standard_E20ads_v5: { dbu: 7, photon_dbu_jobs: 17.5, photon_dbu_all_purpose: 14 }
+  Standard_E20as_v4: { dbu: 5 }
+  Standard_E20as_v5: { dbu: 7, photon_dbu_jobs: 17.5, photon_dbu_all_purpose: 14 }
+  Standard_E20d_v4: { dbu: 5, photon_dbu_jobs: 12.5, photon_dbu_all_purpose: 10 }
+  Standard_E20ds_v4: { dbu: 5, photon_dbu_jobs: 12.5, photon_dbu_all_purpose: 10 }
+  Standard_E20ds_v5: { dbu: 7, photon_dbu_jobs: 17.5, photon_dbu_all_purpose: 14 }
+  Standard_E20ds_v6: { dbu: 7.7, photon_dbu_jobs: 19.25, photon_dbu_all_purpose: 15.4 }
+  Standard_E20s_v4: { dbu: 5, photon_dbu_jobs: 12.5, photon_dbu_all_purpose: 10 }
+  Standard_E20s_v5: { dbu: 7, photon_dbu_jobs: 17.5, photon_dbu_all_purpose: 14 }
+  Standard_E2ds_v6: { dbu: 0.77, photon_dbu_jobs: 1.93, photon_dbu_all_purpose: 1.54 }
+  Standard_E32_v3: { dbu: 8 }
+  Standard_E32a_v4: { dbu: 8, photon_dbu_jobs: 20, photon_dbu_all_purpose: 16 }
+  Standard_E32ads_v5: { dbu: 11, photon_dbu_jobs: 27.5, photon_dbu_all_purpose: 22 }
+  Standard_E32ads_v7: { dbu: 16.44, photon_dbu_jobs: 32.88, photon_dbu_all_purpose: 32.88 }
+  Standard_E32as_v4: { dbu: 8 }
+  Standard_E32as_v5: { dbu: 11, photon_dbu_jobs: 27.5, photon_dbu_all_purpose: 22 }
+  Standard_E32d_v4: { dbu: 8, photon_dbu_jobs: 20, photon_dbu_all_purpose: 16 }
+  Standard_E32ds_v4: { dbu: 8, photon_dbu_jobs: 20, photon_dbu_all_purpose: 16 }
+  Standard_E32ds_v5: { dbu: 11, photon_dbu_jobs: 27.5, photon_dbu_all_purpose: 22 }
+  Standard_E32ds_v6: { dbu: 12.32, photon_dbu_jobs: 30.8, photon_dbu_all_purpose: 24.64 }
+  Standard_E32pds_v6: { dbu: 11.33, photon_dbu_jobs: 28.33, photon_dbu_all_purpose: 22.66 }
+  Standard_E32ps_v6: { dbu: 11.33 }
+  Standard_E32s_v3: { dbu: 8 }
+  Standard_E32s_v4: { dbu: 8, photon_dbu_jobs: 20, photon_dbu_all_purpose: 16 }
+  Standard_E32s_v5: { dbu: 11, photon_dbu_jobs: 27.5, photon_dbu_all_purpose: 22 }
+  Standard_E48a_v4: { dbu: 12, photon_dbu_jobs: 30, photon_dbu_all_purpose: 24 }
+  Standard_E48ads_v5: { dbu: 16.5, photon_dbu_jobs: 41.25, photon_dbu_all_purpose: 33 }
+  Standard_E48ads_v7: { dbu: 24.66, photon_dbu_jobs: 49.32, photon_dbu_all_purpose: 49.32 }
+  Standard_E48as_v4: { dbu: 12 }
+  Standard_E48as_v5: { dbu: 16.5, photon_dbu_jobs: 41.25, photon_dbu_all_purpose: 33 }
+  Standard_E48d_v4: { dbu: 12, photon_dbu_jobs: 30, photon_dbu_all_purpose: 24 }
+  Standard_E48ds_v4: { dbu: 12, photon_dbu_jobs: 30, photon_dbu_all_purpose: 24 }
+  Standard_E48ds_v5: { dbu: 16.5, photon_dbu_jobs: 41.25, photon_dbu_all_purpose: 33 }
+  Standard_E48ds_v6: { dbu: 18.48, photon_dbu_jobs: 46.2, photon_dbu_all_purpose: 36.96 }
+  Standard_E48pds_v6: { dbu: 17, photon_dbu_jobs: 42.5, photon_dbu_all_purpose: 34 }
+  Standard_E48ps_v6: { dbu: 17 }
+  Standard_E48s_v4: { dbu: 12, photon_dbu_jobs: 30, photon_dbu_all_purpose: 24 }
+  Standard_E48s_v5: { dbu: 16.5, photon_dbu_jobs: 41.25, photon_dbu_all_purpose: 33 }
+  Standard_E4a_v4: { dbu: 1, photon_dbu_jobs: 2.5, photon_dbu_all_purpose: 2 }
+  Standard_E4ads_v5: { dbu: 1.5, photon_dbu_jobs: 3.75, photon_dbu_all_purpose: 3 }
+  Standard_E4ads_v7: { dbu: 2.06, photon_dbu_jobs: 4.12, photon_dbu_all_purpose: 4.12 }
+  Standard_E4as_v4: { dbu: 1 }
+  Standard_E4as_v5: { dbu: 1.5, photon_dbu_jobs: 3.75, photon_dbu_all_purpose: 3 }
+  Standard_E4d_v4: { dbu: 1, photon_dbu_jobs: 2.5, photon_dbu_all_purpose: 2 }
+  Standard_E4ds_v4: { dbu: 1, photon_dbu_jobs: 2.5, photon_dbu_all_purpose: 2 }
+  Standard_E4ds_v5: { dbu: 1.5, photon_dbu_jobs: 3.75, photon_dbu_all_purpose: 3 }
+  Standard_E4ds_v6: { dbu: 1.54, photon_dbu_jobs: 3.85, photon_dbu_all_purpose: 3.08 }
+  Standard_E4pds_v6: { dbu: 1.42, photon_dbu_jobs: 3.55, photon_dbu_all_purpose: 2.84 }
+  Standard_E4ps_v6: { dbu: 1.42 }
+  Standard_E4s_v4: { dbu: 1, photon_dbu_jobs: 2.5, photon_dbu_all_purpose: 2 }
+  Standard_E4s_v5: { dbu: 1.5, photon_dbu_jobs: 3.75, photon_dbu_all_purpose: 3 }
+  Standard_E64_v3: { dbu: 16 }
+  Standard_E64a_v4: { dbu: 16, photon_dbu_jobs: 40, photon_dbu_all_purpose: 32 }
+  Standard_E64ads_v5: { dbu: 22, photon_dbu_jobs: 55, photon_dbu_all_purpose: 44 }
+  Standard_E64ads_v7: { dbu: 32.88, photon_dbu_jobs: 65.76, photon_dbu_all_purpose: 65.76 }
+  Standard_E64as_v4: { dbu: 16 }
+  Standard_E64as_v5: { dbu: 22, photon_dbu_jobs: 55, photon_dbu_all_purpose: 44 }
+  Standard_E64d_v4: { dbu: 16, photon_dbu_jobs: 40, photon_dbu_all_purpose: 32 }
+  Standard_E64ds_v4: { dbu: 16, photon_dbu_jobs: 40, photon_dbu_all_purpose: 32 }
+  Standard_E64ds_v5: { dbu: 22, photon_dbu_jobs: 55, photon_dbu_all_purpose: 44 }
+  Standard_E64ds_v6: { dbu: 24.64, photon_dbu_jobs: 61.6, photon_dbu_all_purpose: 49.28 }
+  Standard_E64pds_v6: { dbu: 22.67, photon_dbu_jobs: 56.68, photon_dbu_all_purpose: 45.34 }
+  Standard_E64ps_v6: { dbu: 22.67 }
+  Standard_E64s_v3: { dbu: 16 }
+  Standard_E64s_v4: { dbu: 16, photon_dbu_jobs: 40, photon_dbu_all_purpose: 32 }
+  Standard_E64s_v5: { dbu: 22, photon_dbu_jobs: 55, photon_dbu_all_purpose: 44 }
+  Standard_E80ids_v4: { dbu: 20, photon_dbu_jobs: 50, photon_dbu_all_purpose: 40 }
+  Standard_E80is_v4: { dbu: 20, photon_dbu_jobs: 50, photon_dbu_all_purpose: 40 }
+  Standard_E8_v3: { dbu: 2, photon_dbu_jobs: 5, photon_dbu_all_purpose: 4 }
+  Standard_E8a_v4: { dbu: 2, photon_dbu_jobs: 5, photon_dbu_all_purpose: 4 }
+  Standard_E8ads_v5: { dbu: 2.75, photon_dbu_jobs: 6.88, photon_dbu_all_purpose: 5.5 }
+  Standard_E8ads_v7: { dbu: 4.11, photon_dbu_jobs: 8.22, photon_dbu_all_purpose: 8.22 }
+  Standard_E8as_v4: { dbu: 2, photon_dbu_jobs: 5, photon_dbu_all_purpose: 4 }
+  Standard_E8as_v5: { dbu: 2.75, photon_dbu_jobs: 6.88, photon_dbu_all_purpose: 5.5 }
+  Standard_E8d_v4: { dbu: 2, photon_dbu_jobs: 5, photon_dbu_all_purpose: 4 }
+  Standard_E8ds_v4: { dbu: 2, photon_dbu_jobs: 5, photon_dbu_all_purpose: 4 }
+  Standard_E8ds_v5: { dbu: 2.75, photon_dbu_jobs: 6.88, photon_dbu_all_purpose: 5.5 }
+  Standard_E8ds_v6: { dbu: 3.08, photon_dbu_jobs: 7.7, photon_dbu_all_purpose: 6.16 }
+  Standard_E8pds_v6: { dbu: 2.83, photon_dbu_jobs: 7.08, photon_dbu_all_purpose: 5.66 }
+  Standard_E8ps_v6: { dbu: 2.83 }
+  Standard_E8s_v3: { dbu: 2, photon_dbu_jobs: 5, photon_dbu_all_purpose: 4 }
+  Standard_E8s_v4: { dbu: 2, photon_dbu_jobs: 5, photon_dbu_all_purpose: 4 }
+  Standard_E8s_v5: { dbu: 2.75, photon_dbu_jobs: 6.88, photon_dbu_all_purpose: 5.5 }
+  Standard_E96a_v4: { dbu: 24, photon_dbu_jobs: 60, photon_dbu_all_purpose: 48 }
+  Standard_E96ads_v5: { dbu: 33, photon_dbu_jobs: 82.5, photon_dbu_all_purpose: 66 }
+  Standard_E96as_v4: { dbu: 24 }
+  Standard_E96as_v5: { dbu: 33, photon_dbu_jobs: 82.5, photon_dbu_all_purpose: 66 }
+  Standard_E96ds_v5: { dbu: 33, photon_dbu_jobs: 82.5, photon_dbu_all_purpose: 66 }
+  Standard_E96ds_v6: { dbu: 36.96, photon_dbu_jobs: 92.4, photon_dbu_all_purpose: 73.92 }
+  Standard_E96pds_v6: { dbu: 34, photon_dbu_jobs: 85, photon_dbu_all_purpose: 68 }
+  Standard_E96ps_v6: { dbu: 34 }
+  Standard_E96s_v5: { dbu: 33, photon_dbu_jobs: 82.5, photon_dbu_all_purpose: 66 }
+  Standard_EC16ads_v5: { dbu: 5.5, photon_dbu_jobs: 13.75, photon_dbu_all_purpose: 11 }
+  Standard_EC16ads_v6: { dbu: 7.02, photon_dbu_jobs: 14.04, photon_dbu_all_purpose: 14.04 }
+  Standard_EC16as_v5: { dbu: 5.5, photon_dbu_jobs: 13.75, photon_dbu_all_purpose: 11 }
+  Standard_EC2ads_v6: { dbu: 0.88, photon_dbu_jobs: 1.76, photon_dbu_all_purpose: 1.76 }
+  Standard_EC32ads_v5: { dbu: 11, photon_dbu_jobs: 27.5, photon_dbu_all_purpose: 22 }
+  Standard_EC32ads_v6: { dbu: 14.04, photon_dbu_jobs: 28.08, photon_dbu_all_purpose: 28.08 }
+  Standard_EC32as_v5: { dbu: 11, photon_dbu_jobs: 27.5, photon_dbu_all_purpose: 22 }
+  Standard_EC48ads_v6: { dbu: 21.06, photon_dbu_jobs: 42.12, photon_dbu_all_purpose: 42.12 }
+  Standard_EC4ads_v6: { dbu: 1.76, photon_dbu_jobs: 3.52, photon_dbu_all_purpose: 3.52 }
+  Standard_EC64ads_v6: { dbu: 28.08, photon_dbu_jobs: 56.16, photon_dbu_all_purpose: 56.16 }
+  Standard_EC8ads_v5: { dbu: 2.75, photon_dbu_jobs: 6.88, photon_dbu_all_purpose: 5.5 }
+  Standard_EC8ads_v6: { dbu: 3.51, photon_dbu_jobs: 7.02, photon_dbu_all_purpose: 7.02 }
+  Standard_EC8as_v5: { dbu: 2.75, photon_dbu_jobs: 6.88, photon_dbu_all_purpose: 5.5 }
+  Standard_EC96ads_v6: { dbu: 42.12, photon_dbu_jobs: 84.24 }
+  Standard_L16as_v3: { dbu: 5.5, photon_dbu_jobs: 13.75, photon_dbu_all_purpose: 11 }
+  Standard_L16s: { dbu: 4 }
+  Standard_L16s_v3: { dbu: 5.5, photon_dbu_jobs: 13.75, photon_dbu_all_purpose: 11 }
+  Standard_L32as_v3: { dbu: 11, photon_dbu_jobs: 27.5, photon_dbu_all_purpose: 22 }
+  Standard_L32s: { dbu: 8 }
+  Standard_L32s_v3: { dbu: 11, photon_dbu_jobs: 27.5, photon_dbu_all_purpose: 22 }
+  Standard_L48as_v3: { dbu: 16.5, photon_dbu_jobs: 41.25, photon_dbu_all_purpose: 33 }
+  Standard_L48s_v3: { dbu: 16.5, photon_dbu_jobs: 41.25, photon_dbu_all_purpose: 33 }
+  Standard_L4s: { dbu: 1 }
+  Standard_L64as_v3: { dbu: 22, photon_dbu_jobs: 55, photon_dbu_all_purpose: 44 }
+  Standard_L64s_v3: { dbu: 22, photon_dbu_jobs: 55, photon_dbu_all_purpose: 44 }
+  Standard_L80as_v3: { dbu: 27.5, photon_dbu_jobs: 68.75, photon_dbu_all_purpose: 55 }
+  Standard_L80s_v3: { dbu: 27.5, photon_dbu_jobs: 68.75, photon_dbu_all_purpose: 55 }
+  Standard_L8as_v3: { dbu: 2.75, photon_dbu_jobs: 6.88, photon_dbu_all_purpose: 5.5 }
+  Standard_L8s: { dbu: 2, photon_dbu_jobs: 5, photon_dbu_all_purpose: 4 }
+  Standard_L8s_v3: { dbu: 2.75, photon_dbu_jobs: 6.88, photon_dbu_all_purpose: 5.5 }
+  Standard_NC12: { dbu: 3, photon_dbu_jobs: 7.5, photon_dbu_all_purpose: 6 }
+  Standard_NC12s_v3: { dbu: 10, photon_dbu_jobs: 25, photon_dbu_all_purpose: 20 }
+  Standard_NC16as_T4_v3: { dbu: 2.5, photon_dbu_jobs: 6.25, photon_dbu_all_purpose: 5 }
+  Standard_NC24: { dbu: 6, photon_dbu_jobs: 15, photon_dbu_all_purpose: 12 }
+  Standard_NC24ads_A100_v4: { dbu: 10 }
+  Standard_NC24s_v3: { dbu: 20, photon_dbu_jobs: 50, photon_dbu_all_purpose: 40 }
+  Standard_NC40ads_H100_v5: { dbu: 13.06, photon_dbu_jobs: 32.65, photon_dbu_all_purpose: 26.12 }
+  Standard_NC48ads_A100_v4: { dbu: 20 }
+  Standard_NC4as_T4_v3: { dbu: 1, photon_dbu_jobs: 2.5, photon_dbu_all_purpose: 2 }
+  Standard_NC64as_T4_v3: { dbu: 10, photon_dbu_jobs: 25, photon_dbu_all_purpose: 20 }
+  Standard_NC6s_v3: { dbu: 5, photon_dbu_jobs: 12.5, photon_dbu_all_purpose: 10 }
+  Standard_NC80adis_H100_v5: { dbu: 26.12, photon_dbu_jobs: 65.3, photon_dbu_all_purpose: 52.24 }
+  Standard_NC8as_T4_v3: { dbu: 1.5, photon_dbu_jobs: 3.75, photon_dbu_all_purpose: 3 }
+  Standard_NC96ads_A100_v4: { dbu: 44 }
+  Standard_ND96asr_A100_v4: { dbu: 44, photon_dbu_jobs: 110, photon_dbu_all_purpose: 88 }
+  Standard_ND96isr_H100_v5: { dbu: 13.06, photon_dbu_jobs: 32.65, photon_dbu_all_purpose: 26.12 }
+  Standard_NV36adms_A10_v5: { dbu: 6 }
+  Standard_NV36ads_A10_v5: { dbu: 4 }
+  Standard_NV72ads_A10_v5: { dbu: 8 }

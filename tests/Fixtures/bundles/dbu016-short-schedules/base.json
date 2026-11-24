@@ -1,0 +1,82 @@
+{
+  "bundle": {
+    "name": "sync",
+    "target": "prod",
+    "mode": "production"
+  },
+  "workspace": {
+    "host": "https://adb-1234567890123456.7.azuredatabricks.net"
+  },
+  "resources": {
+    "jobs": {
+      "orders_sync": {
+        "name": "j",
+        "job_clusters": [
+          {
+            "job_cluster_key": "main",
+            "new_cluster": {
+              "spark_version": "15.4.x-scala2.12",
+              "node_type_id": "Standard_DS3_v2",
+              "num_workers": 2
+            }
+          }
+        ],
+        "tasks": [
+          {
+            "task_key": "t",
+            "job_cluster_key": "main",
+            "notebook_task": {
+              "notebook_path": "/x"
+            }
+          }
+        ],
+        "schedule": {
+          "quartz_cron_expression": "0 0/30 * * * ?",
+          "timezone_id": "UTC"
+        }
+      },
+      "pooled": {
+        "name": "j",
+        "job_clusters": [
+          {
+            "job_cluster_key": "main",
+            "new_cluster": {
+              "spark_version": "15.4.x-scala2.12",
+              "instance_pool_id": "pool-1",
+              "num_workers": 2
+            }
+          }
+        ],
+        "tasks": [
+          {
+            "task_key": "t",
+            "job_cluster_key": "main",
+            "notebook_task": {
+              "notebook_path": "/x"
+            }
+          }
+        ],
+        "schedule": {
+          "quartz_cron_expression": "0 0/5 * * * ?",
+          "timezone_id": "UTC"
+        }
+      },
+      "serverless_sync": {
+        "name": "j",
+        "tasks": [
+          {
+            "task_key": "t",
+            "environment_key": "default",
+            "notebook_task": {
+              "notebook_path": "/x"
+            }
+          }
+        ],
+        "schedule": {
+          "quartz_cron_expression": "0 0/5 * * * ?",
+          "timezone_id": "UTC"
+        }
+      }
+    }
+  }
+}

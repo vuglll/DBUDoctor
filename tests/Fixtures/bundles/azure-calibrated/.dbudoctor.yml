@@ -1,0 +1,4 @@
+region: westeurope
+calibration:
+  enabled: true
+  warehouse_id: abcdef0123456789

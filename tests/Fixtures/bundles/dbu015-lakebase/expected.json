@@ -1,0 +1,195 @@
+{
+  "schemaVersion": 1,
+  "tool": {
+    "name": "dbudoctor",
+    "version": "0.0.0-test"
+  },
+  "exitCode": 0,
+  "policyViolated": false,
+  "bundles": [
+    {
+      "bundle": "shop",
+      "target": "prod",
+      "root": null,
+      "cloud": "azure",
+      "region": "westeurope",
+      "currency": "USD",
+      "catalogAsOf": "2026-11-01",
+      "cloudInfraIncluded": true,
+      "commitment": "payg",
+      "tier": "premium",
+      "scaling": "constant_runtime",
+      "autoscale": "max",
+      "defaultRunMinutes": null,
+      "calibration": null,
+      "hasCostRelevantChanges": true,
+      "totals": {
+        "monthlyDelta": 279.882,
+        "baseMonthly": 93.294,
+        "percentChange": 300,
+        "includedChanges": 1,
+        "excludedChanges": 1
+      },
+      "changes": [
+        {
+          "type": "postgres_endpoints",
+          "key": "dev_primary",
+          "kind": "modified",
+          "summary": "autoscaling_limit_min_cu `1` → `2`; no_suspension unset → `true`",
+          "category": "rate",
+          "confidence": "Unknown",
+          "inTotals": false,
+          "monthlyDelta": null,
+          "notes": [],
+          "before": {
+            "sku": "PREMIUM_DATABASE_SERVERLESS_COMPUTE",
+            "pricePerDbu": 0.3,
+            "dbuPerHour": 0.213,
+            "dbuCostPerHour": 0.0639,
+            "vmCostPerHour": null,
+            "ratePerHour": 0.0639,
+            "serverless": true,
+            "cloudInfraIncluded": false,
+            "runsPerMonth": null,
+            "frequency": null,
+            "monthly": null,
+            "monthlyCeiling": 186.588,
+            "confidence": "Unknown",
+            "monthlyNote": "scales to zero: monthly cost depends on active time",
+            "assumptions": [
+              "up to $187 a month if active all month at 4 CU"
+            ],
+            "unknownReasons": [],
+            "history": null
+          },
+          "after": {
+            "sku": "PREMIUM_DATABASE_SERVERLESS_COMPUTE",
+            "pricePerDbu": 0.3,
+            "dbuPerHour": 0.426,
+            "dbuCostPerHour": 0.1278,
+            "vmCostPerHour": null,
+            "ratePerHour": 0.1278,
+            "serverless": true,
+            "cloudInfraIncluded": false,
+            "runsPerMonth": null,
+            "frequency": "always active",
+            "monthly": 93.294,
+            "monthlyCeiling": 186.588,
+            "confidence": "Medium",
+            "monthlyNote": null,
+            "assumptions": [
+              "always active (no_suspension): 2 CU for 730 h",
+              "up to $187 a month at 4 CU"
+            ],
+            "unknownReasons": [],
+            "history": null
+          }
+        },
+        {
+          "type": "postgres_endpoints",
+          "key": "prod_primary",
+          "kind": "modified",
+          "summary": "autoscaling_limit_max_cu `8` → `16`; autoscaling_limit_min_cu `2` → `8`",
+          "category": "monthly",
+          "confidence": "Medium",
+          "inTotals": true,
+          "monthlyDelta": 279.882,
+          "notes": [],
+          "before": {
+            "sku": "PREMIUM_DATABASE_SERVERLESS_COMPUTE",
+            "pricePerDbu": 0.3,
+            "dbuPerHour": 0.426,
+            "dbuCostPerHour": 0.1278,
+            "vmCostPerHour": null,
+            "ratePerHour": 0.1278,
+            "serverless": true,
+            "cloudInfraIncluded": false,
+            "runsPerMonth": null,
+            "frequency": "always active",
+            "monthly": 93.294,
+            "monthlyCeiling": 373.176,
+            "confidence": "Medium",
+            "monthlyNote": null,
+            "assumptions": [
+              "always active (no_suspension): 2 CU for 730 h",
+              "up to $373 a month at 8 CU"
+            ],
+            "unknownReasons": [],
+            "history": null
+          },
+          "after": {
+            "sku": "PREMIUM_DATABASE_SERVERLESS_COMPUTE",
+            "pricePerDbu": 0.3,
+            "dbuPerHour": 1.704,
+            "dbuCostPerHour": 0.5112,
+            "vmCostPerHour": null,
+            "ratePerHour": 0.5112,
+            "serverless": true,
+            "cloudInfraIncluded": false,
+            "runsPerMonth": null,
+            "frequency": "always active",
+            "monthly": 373.176,
+            "monthlyCeiling": 746.352,
+            "confidence": "Medium",
+            "monthlyNote": null,
+            "assumptions": [
+              "always active (no_suspension): 8 CU for 730 h",
+              "up to $746 a month at 16 CU"
+            ],
+            "unknownReasons": [],
+            "history": null
+          }
+        }
+      ],
+      "findings": [
+        {
+          "ruleId": "DBU015",
+          "severity": "warning",
+          "resourceType": "postgres_endpoints",
+          "resourceKey": "dev_primary",
+          "fieldPath": "no_suspension",
+          "message": "postgres_endpoint `dev_primary` on branch `dev` never scales to zero (`no_suspension: true`): about $93.29 a month at 2 CU even when idle. Let non-production branches scale to zero.",
+          "docsUrl": "https://github.com/vuglll/DBUDoctor/blob/main/docs/rules/DBU015.md",
+          "existing": false,
+          "location": null
+        },
+        {
+          "ruleId": "DBU015",
+          "severity": "info",
+          "resourceType": "postgres_endpoints",
+          "resourceKey": "prod_primary",
+          "fieldPath": "autoscaling_limit_min_cu",
+          "message": "postgres_endpoint `prod_primary` keeps at least 8 CU (limit 8) at $0.51 per active hour: the minimum is billed for every active hour, and autoscaling adds capacity when it is busy.",
+          "docsUrl": "https://github.com/vuglll/DBUDoctor/blob/main/docs/rules/DBU015.md",
+          "existing": false,
+          "location": null
+        }
+      ],
+      "suppressedFindings": 0,
+      "existingFindingsHidden": 0,
+      "possibleRenames": [],
+      "notPriced": [],
+      "assumptions": [
+        "Prices: Azure westeurope, Premium tier, pay-as-you-go VMs, catalog 2026-11-01.",
+        "Scaling: constant runtime. Autoscale: at max.",
+        "Run duration: not set, so scheduled classic jobs show rates only (set estimation.default_run_minutes)."
+      ],
+      "notModeled": [
+        "managed disks",
+        "blob storage",
+        "public IP addresses",
+        "network egress",
+        "NAT",
+        "storage",
+        "idle VMs in instance pools",
+        "VM time during cluster startup"
+      ],
+      "warnings": [],
+      "policy": {
+        "violated": false,
+        "violations": [],
+        "notes": []
+      }
+    }
+  ]
+}

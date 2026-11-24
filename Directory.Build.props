@@ -1,0 +1,37 @@
+<Project>
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Deterministic>true</Deterministic>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <Authors>Nemanja Markovic</Authors>
+    <Copyright>Copyright 2026 Nemanja Markovic</Copyright>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <DBUDoctorRepositoryUrl>https://github.com/vuglll/DBUDoctor</DBUDoctorRepositoryUrl>
+  </PropertyGroup>
+
+  <PropertyGroup Label="Release">
+    <Version>0.3.0</Version>
+  </PropertyGroup>
+
+  <!-- Libraries and the CLI run under Native AOT: the trim and AOT analyzers run on every build,
+       and TreatWarningsAsErrors turns their warnings into errors. -->
+  <PropertyGroup Condition="'$(IsTestProject)' != 'true'">
+    <IsAotCompatible>true</IsAotCompatible>
+    <EnableTrimAnalyzer>true</EnableTrimAnalyzer>
+    <EnableAotAnalyzer>true</EnableAotAnalyzer>
+    <EnableSingleFileAnalyzer>true</EnableSingleFileAnalyzer>
+  </PropertyGroup>
+
+  <!-- No ICU dependency on Linux and macOS. Windows keeps ICU: it converts IANA time zone IDs
+       (job schedules use them) to Windows zones. -->
+  <PropertyGroup Condition="!$([MSBuild]::IsOSPlatform('Windows')) and !$(RuntimeIdentifier.StartsWith('win'))">
+    <InvariantGlobalization>true</InvariantGlobalization>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
+    <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+  </PropertyGroup>
+</Project>

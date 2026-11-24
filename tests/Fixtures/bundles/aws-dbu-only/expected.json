@@ -1,0 +1,227 @@
+{
+  "schemaVersion": 1,
+  "tool": {
+    "name": "dbudoctor",
+    "version": "0.0.0-test"
+  },
+  "exitCode": 1,
+  "policyViolated": true,
+  "bundles": [
+    {
+      "bundle": "lakehouse",
+      "target": "prod",
+      "root": null,
+      "cloud": "aws",
+      "region": "us-east-1",
+      "currency": "USD",
+      "catalogAsOf": "2026-10-15",
+      "cloudInfraIncluded": false,
+      "commitment": "payg",
+      "tier": "premium",
+      "scaling": "constant_runtime",
+      "autoscale": "max",
+      "defaultRunMinutes": 15,
+      "calibration": null,
+      "hasCostRelevantChanges": true,
+      "totals": {
+        "monthlyDelta": 93.064375,
+        "baseMonthly": 94.43296875,
+        "percentChange": 98.55072463768115942028985507,
+        "includedChanges": 1,
+        "excludedChanges": 2
+      },
+      "changes": [
+        {
+          "type": "jobs",
+          "key": "ingest",
+          "kind": "modified",
+          "summary": "job_clusters[m].new_cluster.node_type_id `m5.xlarge` → `m5.2xlarge`",
+          "category": "monthly",
+          "confidence": "Medium",
+          "inTotals": true,
+          "monthlyDelta": 93.064375,
+          "notes": [],
+          "before": {
+            "sku": "PREMIUM_JOBS_COMPUTE",
+            "pricePerDbu": 0.15,
+            "dbuPerHour": 3.45,
+            "dbuCostPerHour": 0.5175,
+            "vmCostPerHour": null,
+            "ratePerHour": 0.5175,
+            "serverless": false,
+            "cloudInfraIncluded": false,
+            "runsPerMonth": 729.91666666666666666666666667,
+            "frequency": "hourly",
+            "monthly": 94.43296875,
+            "monthlyCeiling": null,
+            "confidence": "Medium",
+            "monthlyNote": null,
+            "assumptions": [
+              "15-minute runs (configured)"
+            ],
+            "unknownReasons": [],
+            "history": null
+          },
+          "after": {
+            "sku": "PREMIUM_JOBS_COMPUTE",
+            "pricePerDbu": 0.15,
+            "dbuPerHour": 6.85,
+            "dbuCostPerHour": 1.0275,
+            "vmCostPerHour": null,
+            "ratePerHour": 1.0275,
+            "serverless": false,
+            "cloudInfraIncluded": false,
+            "runsPerMonth": 729.91666666666666666666666667,
+            "frequency": "hourly",
+            "monthly": 187.49734375,
+            "monthlyCeiling": null,
+            "confidence": "Medium",
+            "monthlyNote": null,
+            "assumptions": [
+              "15-minute runs (configured)",
+              "constant runtime: compute size changed, run duration unchanged"
+            ],
+            "unknownReasons": [],
+            "history": null
+          }
+        },
+        {
+          "type": "jobs",
+          "key": "ingest_v2",
+          "kind": "added",
+          "summary": "added, no schedule",
+          "category": "needs_history",
+          "confidence": "Unknown",
+          "inTotals": false,
+          "monthlyDelta": null,
+          "notes": [],
+          "before": null,
+          "after": {
+            "sku": "PREMIUM_ALL_PURPOSE_COMPUTE",
+            "pricePerDbu": 0.55,
+            "dbuPerHour": null,
+            "dbuCostPerHour": null,
+            "vmCostPerHour": null,
+            "ratePerHour": null,
+            "serverless": false,
+            "cloudInfraIncluded": false,
+            "runsPerMonth": null,
+            "frequency": "no schedule",
+            "monthly": null,
+            "monthlyCeiling": null,
+            "confidence": "Unknown",
+            "monthlyNote": "runs on an all-purpose cluster: its cost depends on that cluster's usage",
+            "assumptions": [
+              "tasks on existing all-purpose clusters (t) are priced with those clusters"
+            ],
+            "unknownReasons": [],
+            "history": null
+          }
+        },
+        {
+          "type": "sql_warehouses",
+          "key": "bi",
+          "kind": "modified",
+          "summary": "classic → serverless",
+          "category": "rate",
+          "confidence": "Low",
+          "inTotals": false,
+          "monthlyDelta": null,
+          "notes": [
+            "classic/pro cost excludes cloud VMs; serverless includes them"
+          ],
+          "before": {
+            "sku": "PREMIUM_SQL_PRO_COMPUTE",
+            "pricePerDbu": 0.55,
+            "dbuPerHour": 12,
+            "dbuCostPerHour": 6.6,
+            "vmCostPerHour": null,
+            "ratePerHour": 6.6,
+            "serverless": false,
+            "cloudInfraIncluded": false,
+            "runsPerMonth": null,
+            "frequency": null,
+            "monthly": null,
+            "monthlyCeiling": null,
+            "confidence": "Unknown",
+            "monthlyNote": "SQL warehouse: needs history",
+            "assumptions": [],
+            "unknownReasons": [],
+            "history": null
+          },
+          "after": {
+            "sku": "PREMIUM_SERVERLESS_SQL_COMPUTE",
+            "pricePerDbu": 0.7,
+            "dbuPerHour": 12,
+            "dbuCostPerHour": 8.4,
+            "vmCostPerHour": null,
+            "ratePerHour": 8.4,
+            "serverless": true,
+            "cloudInfraIncluded": false,
+            "runsPerMonth": null,
+            "frequency": null,
+            "monthly": null,
+            "monthlyCeiling": null,
+            "confidence": "Unknown",
+            "monthlyNote": "SQL warehouse: needs history",
+            "assumptions": [],
+            "unknownReasons": [],
+            "history": null
+          }
+        }
+      ],
+      "findings": [
+        {
+          "ruleId": "DBU001",
+          "severity": "warning",
+          "resourceType": "jobs",
+          "resourceKey": "ingest_v2",
+          "fieldPath": "tasks[t].existing_cluster_id",
+          "message": "job `ingest_v2`, task `t` runs on all-purpose cluster `0123-456789-…`. Jobs compute costs about 27% of the all-purpose DBU rate here.",
+          "docsUrl": "https://github.com/vuglll/DBUDoctor/blob/main/docs/rules/DBU001.md",
+          "existing": false,
+          "location": null
+        },
+        {
+          "ruleId": "DBU007",
+          "severity": "info",
+          "resourceType": "jobs",
+          "resourceKey": "ingest_v2",
+          "fieldPath": "timeout_seconds",
+          "message": "job `ingest_v2` has no timeout: neither the job nor its tasks set one.",
+          "docsUrl": "https://github.com/vuglll/DBUDoctor/blob/main/docs/rules/DBU007.md",
+          "existing": false,
+          "location": null
+        }
+      ],
+      "suppressedFindings": 0,
+      "existingFindingsHidden": 5,
+      "possibleRenames": [],
+      "notPriced": [],
+      "assumptions": [
+        "Prices: AWS us-east-1, Premium tier, DBUs only (cloud VMs not included), catalog 2026-10-15.",
+        "Scaling: constant runtime. Autoscale: at max.",
+        "Run duration: 15 minutes (estimation.default_run_minutes)."
+      ],
+      "notModeled": [
+        "storage",
+        "cloud VMs for classic compute",
+        "idle VMs in instance pools",
+        "VM time during cluster startup"
+      ],
+      "warnings": [
+        "Cloud VMs are not included in classic rates: the catalog has no VM prices for AWS."
+      ],
+      "policy": {
+        "violated": true,
+        "violations": [
+          {
+            "policy": "fail_on.rules",
+            "message": "DBU001 is reported for jobs.ingest_v2."
+          }
+        ],
+        "notes": []
+      }
+    }
+  ]
+}

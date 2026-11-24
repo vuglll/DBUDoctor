@@ -1,0 +1,52 @@
+name: PyPI test upload
+
+# Manual: builds the release binaries and wheels from the selected branch and publishes them to
+# TestPyPI as <version>.dev<run number>, to check the PyPI packaging before a real release.
+# TestPyPI authenticates this workflow through Trusted Publishing (environment testpypi).
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  version:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Read the version
+        id: version
+        run: |
+          version="$(sed -n 's:.*<Version>\(.*\)</Version>.*:\1:p' Directory.Build.props)"
+          echo "version=${version}.dev${GITHUB_RUN_NUMBER}" >> "$GITHUB_OUTPUT"
+
+  binaries:
+    uses: ./.github/workflows/binaries.yml
+
+  testpypi:
+    needs: [version, binaries]
+    runs-on: ubuntu-latest
+    environment: testpypi
+    permissions:
+      contents: read
+      id-token: write # Trusted Publishing to TestPyPI
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: binary-*
+          path: dist
+          merge-multiple: true
+
+      - name: Build the wheels
+        run: tools/wheels/build_all.sh "${{ needs.version.outputs.version }}"
+
+      - name: Publish to TestPyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          repository-url: https://test.pypi.org/legacy/
+          packages-dir: wheels/

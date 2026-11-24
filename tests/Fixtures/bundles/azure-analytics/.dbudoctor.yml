@@ -1,0 +1,5 @@
+region: westeurope
+estimation:
+  default_run_minutes: 20
+fail_on:
+  monthly_increase: 500

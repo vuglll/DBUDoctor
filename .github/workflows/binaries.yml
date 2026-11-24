@@ -1,0 +1,52 @@
+name: Binaries
+
+# Reusable: builds the Native AOT binaries and uploads one archive per platform as the artifacts
+# binary-<rid>. Called by release.yml and pypi-test.yml. Linux builds on Ubuntu 22.04, so the binaries
+# run on glibc 2.34 and later (Databricks Runtime 13.3 LTS and later run Ubuntu 22.04).
+on:
+  workflow_call:
+
+permissions:
+  contents: read
+
+env:
+  DOTNET_CLI_TELEMETRY_OPTOUT: "1"
+  DOTNET_NOLOGO: "1"
+  PROJECT: src/DBUDoctor.Cli/DBUDoctor.Cli.csproj
+
+jobs:
+  binaries:
+    strategy:
+      matrix:
+        include:
+          - { rid: linux-x64, os: ubuntu-22.04 }
+          - { rid: linux-arm64, os: ubuntu-22.04-arm }
+          - { rid: osx-arm64, os: macos-latest }
+          - { rid: win-x64, os: windows-latest }
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Publish
+        shell: bash
+        run: dotnet publish "$PROJECT" --configuration Release --runtime ${{ matrix.rid }} --output publish
+
+      - name: Archive
+        shell: bash
+        run: |
+          mkdir -p dist
+          cp LICENSE README.md publish/
+          if [ "${{ matrix.rid }}" = "win-x64" ]; then
+            (cd publish && 7z a -tzip ../dist/dbudoctor-${{ matrix.rid }}.zip dbudoctor.exe LICENSE README.md)
+          else
+            tar -C publish -czf dist/dbudoctor-${{ matrix.rid }}.tar.gz dbudoctor LICENSE README.md
+          fi
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: binary-${{ matrix.rid }}
+          path: dist/*

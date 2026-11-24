@@ -1,0 +1,188 @@
+name: Release
+
+# Builds the Native AOT binaries, the dotnet tool package, the PyPI wheels and the agent skill when a
+# vX.Y.Z tag is pushed on main, and publishes them as a GitHub release (with SHA-256 checksums), to
+# nuget.org and to PyPI. Both registries authenticate this workflow through Trusted Publishing, so no
+# API key or token is stored.
+on:
+  push:
+    tags: ["v*.*.*"]
+
+permissions:
+  contents: read
+
+env:
+  DOTNET_CLI_TELEMETRY_OPTOUT: "1"
+  DOTNET_NOLOGO: "1"
+  PROJECT: src/DBUDoctor.Cli/DBUDoctor.Cli.csproj
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Check the tag
+        id: version
+        run: |
+          tag="${GITHUB_REF_NAME}"
+          version="${tag#v}"
+          git fetch --quiet origin main
+          if ! git merge-base --is-ancestor "$GITHUB_SHA" origin/main; then
+            echo "::error::$tag is not on main. Releases are tagged on main."
+            exit 1
+          fi
+          project_version="$(dotnet msbuild "$PROJECT" -getProperty:Version)"
+          if [ "$project_version" != "$version" ]; then
+            echo "::error::$tag does not match the project version $project_version."
+            exit 1
+          fi
+          if ! grep -q "^## $version\$" CHANGELOG.md; then
+            echo "::error::CHANGELOG.md has no '## $version' section."
+            exit 1
+          fi
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+
+      - name: Test
+        run: dotnet test DBUDoctor.slnx --configuration Release
+
+  binaries:
+    needs: check
+    uses: ./.github/workflows/binaries.yml
+
+  pack:
+    needs: check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Pack the dotnet tool
+        run: dotnet pack "$PROJECT" --configuration Release -p:PackAsTool=true --output nupkg
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dotnet-tool
+          path: nupkg/*.nupkg
+          if-no-files-found: error
+
+  github-release:
+    needs: [check, binaries, pack]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: binary-*
+          path: dist
+          merge-multiple: true
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: dotnet-tool
+          path: nupkg
+
+      - name: Package the agent skill
+        run: |
+          dotnet run --project src/DBUDoctor.Cli --configuration Release -- skill export --dir skill/dbudoctor --force
+          (cd skill && zip -qr ../dist/dbudoctor-skill.zip dbudoctor)
+
+      - name: Checksums
+        run: (cd dist && sha256sum * > SHA256SUMS)
+
+      - name: Release notes
+        env:
+          VERSION: ${{ needs.check.outputs.version }}
+        run: |
+          awk -v heading="## $VERSION" '
+            $0 == heading { found = 1; next }
+            found && /^## / { exit }
+            found { print }
+          ' CHANGELOG.md > release-notes.md
+
+      - name: Create the GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ needs.check.outputs.version }}
+        run: |
+          if gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1; then
+            echo "Release $GITHUB_REF_NAME already exists."
+            exit 0
+          fi
+          flags=""
+          case "$VERSION" in *-*) flags="--prerelease" ;; esac
+          gh release create "$GITHUB_REF_NAME" dist/* nupkg/*.nupkg \
+            --title "DBUDoctor $VERSION" --notes-file release-notes.md --verify-tag $flags
+
+  nuget:
+    if: ${{ vars.PUBLISH_NUGET == 'true' }}
+    needs: pack
+    runs-on: ubuntu-latest
+    environment: nuget
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: dotnet-tool
+          path: nupkg
+
+      - name: Sign in to nuget.org
+        id: nuget
+        uses: NuGet/login@v1
+        with:
+          user: ${{ vars.NUGET_USER }}
+
+      - name: Push to nuget.org
+        run: >
+          dotnet nuget push "nupkg/*.nupkg"
+          --api-key "${{ steps.nuget.outputs.NUGET_API_KEY }}"
+          --source https://api.nuget.org/v3/index.json
+          --skip-duplicate
+
+  pypi:
+    if: ${{ vars.PUBLISH_PYPI == 'true' }}
+    needs: [check, binaries]
+    runs-on: ubuntu-latest
+    environment: pypi
+    permissions:
+      contents: read
+      id-token: write # Trusted Publishing to PyPI
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: binary-*
+          path: dist
+          merge-multiple: true
+
+      - name: Build the wheels
+        run: tools/wheels/build_all.sh "${{ needs.check.outputs.version }}"
+
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          packages-dir: wheels/
